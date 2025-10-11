@@ -10,6 +10,10 @@ export default defineConfig({
   preview: {
     port: 3000, // Ensure preview mode also runs on the right port
     host: true,
-    allowedHosts: ["www.onukpa.com", "onukpa.com"],
+    allowedHosts: [
+      "www.onukpa.com",
+      "onukpa.com",
+      "onukpa-website-gj4oj.ondigitalocean.app",
+    ],
   },
 });
