@@ -1,15 +1,8 @@
 // App.js
 import { useEffect } from "react";
-import Navigation from "./components/Layout/Navigation";
-import Footer from "./components/Layout/Footer";
-import Hero from "./components/Sections/Hero";
-import HowItWorks from "./components/Sections/HowItWorks";
-import Properties from "./components/Sections/Properties";
-import Features from "./components/Sections/Features";
-import Stats from "./components/Sections/Stats";
-import AgentSection from "./components/Sections/AgentSection";
-import Testimonials from "./components/Sections/Testimonials";
-import WhatsAppFloatingButton from "./components/UI/WhatsappFloatingButton";
+import { Route, Routes, useLocation } from "react-router-dom";
+import Home from "./components/UI/Home";
+import TermsAndPrivacy from "./components/Sections/TermsAndPrivacy";
 
 const App = () => {
   useEffect(() => {
@@ -31,19 +24,24 @@ const App = () => {
     return () => observer.disconnect();
   }, []);
 
+  function ScrollToTop() {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
+  }
+
   return (
-    <div className="min-h-screen bg-white">
-      <WhatsAppFloatingButton />
-      <Navigation />
-      <Hero />
-      <HowItWorks />
-      <Properties />
-      <Features />
-      <Stats />
-      <Testimonials />
-      <AgentSection />
-      <Footer />
-    </div>
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route path="" element={<Home />} />
+        <Route path="/terms" element={<TermsAndPrivacy />} />
+      </Routes>
+    </>
   );
 };
 

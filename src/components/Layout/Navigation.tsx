@@ -13,6 +13,8 @@ const Navigation = () => {
     { name: "For Agents", href: "#agents" },
   ];
 
+  console.log(window.location.host);
+
   const handleNavClick = (href: string) => {
     // Close mobile menu
     setIsMenuOpen(false);
@@ -29,7 +31,7 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-lg z-30 border-b border-slate-200/80 shadow-sm py-2">
+      <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-lg z-40 border-b border-slate-200/80 shadow-sm py-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             {/* Logo */}
@@ -49,17 +51,19 @@ const Navigation = () => {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
               {navItems.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavClick(item.href);
-                  }}
-                  className="text-slate-600 transition-colors duration-200 font-medium hover:text-primary"
-                >
-                  {item.name}
-                </a>
+                <>
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleNavClick(item.href);
+                    }}
+                    className="text-slate-600 transition-colors duration-200 font-medium hover:text-primary"
+                  >
+                    {item.name}
+                  </a>
+                </>
               ))}
             </div>
 
@@ -143,7 +147,7 @@ const Navigation = () => {
       {/* Overlay for mobile menu */}
       {isMenuOpen && (
         <div
-          className="fixed inset-0 bg-black/20 z-40 md:hidden backdrop-blur-sm transition-opacity duration-300"
+          className="fixed inset-0 bg-black/20 z-20 md:hidden backdrop-blur-sm transition-opacity duration-300"
           onClick={() => setIsMenuOpen(false)}
         />
       )}
