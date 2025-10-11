@@ -16,10 +16,8 @@ const Navigation = () => {
   console.log(window.location.host);
 
   const handleNavClick = (href: string) => {
-    // Close mobile menu
     setIsMenuOpen(false);
 
-    // Smooth scroll to section
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({
