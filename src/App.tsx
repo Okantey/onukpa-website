@@ -1,6 +1,6 @@
 // App.js
 import { useEffect } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Home from "./components/UI/Home";
 import TermsAndPrivacy from "./components/Sections/TermsAndPrivacy";
 
@@ -24,19 +24,8 @@ const App = () => {
     return () => observer.disconnect();
   }, []);
 
-  function ScrollToTop() {
-    const { pathname } = useLocation();
-
-    useEffect(() => {
-      window.scrollTo(0, 0);
-    }, [pathname]);
-
-    return null;
-  }
-
   return (
     <>
-      <ScrollToTop />
       <Routes>
         <Route path="" element={<Home />} />
         <Route path="/terms" element={<TermsAndPrivacy />} />
