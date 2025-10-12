@@ -210,7 +210,7 @@ const Footer = () => {
               <div className="text-slate-400 text-center md:text-left">
                 <p>&copy; {currentYear} Onukpa. All rights reserved. | </p>
               </div>
-              <span>Made with ❤️ for Ghana</span>
+              <span className="text-slate-400">Made with ❤️ for Ghana</span>
             </div>
           </div>
         </div>

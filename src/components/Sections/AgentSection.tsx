@@ -13,8 +13,7 @@ import {
 } from "lucide-react";
 import { accraAreas } from "../../constants/areas";
 import axios from "axios";
-import { toast } from "react-toastify";
-import { Alert, Snackbar } from "@mui/material";
+import { Alert, Snackbar, CircularProgress } from "@mui/material";
 
 interface FormData {
   fullName: string;
@@ -133,18 +132,25 @@ const AgentSection = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+
+    console.log("Formdata", formData);
     try {
       const response = await axios.post(
-        `http://157.245.173.144:3000/agent/add`,
+        `http://157.245.173.144:3000/agent/add`, // This might be unreachable
         {
           ...formData,
           phone: formatPhone(formData.phone),
-          whatsapp: formatPhone(formData.phone),
+          whatsapp: formatPhone(formData.whatsapp), // Should this be formData.phone?
+        },
+        {
+          timeout: 10000, // Add timeout to prevent hanging
         }
       );
+
       if (response.status === 201) {
         const data = response.data;
-        data && showNotification("Registration Successful!", "success");
+        console.log("Success:", data);
+        showNotification("Registration Successful!", "success");
         setFormData({
           fullName: "",
           email: "",
@@ -156,11 +162,28 @@ const AgentSection = () => {
           areas: [],
         });
       }
-    } catch (err) {
-      console.error(err);
-      toast.error("An Error Occurred");
+    } catch (err: any) {
+      console.error("Error details:", err);
+
+      // More detailed error handling
+      if (err.code === "ECONNABORTED") {
+        showNotification("Request timeout - please try again", "error");
+      } else if (err.response) {
+        // Server responded with error status
+        const errorMessage = err.response.data?.error || "Registration failed";
+        showNotification(errorMessage, "error");
+      } else if (err.request) {
+        // Network error - no response received
+        showNotification(
+          "Network error - please check your connection",
+          "error"
+        );
+      } else {
+        // Other errors
+        showNotification("An unexpected error occurred", "error");
+      }
     } finally {
-      setLoading(false);
+      setLoading(false); // This should always run
     }
   };
 
@@ -168,7 +191,7 @@ const AgentSection = () => {
     <>
       <section id="agents" className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 md:animate-on-scroll">
+          <div className="text-center mb-16 animate-on-scroll">
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-4">
               🏆 Exclusive for Real Estate Professionals
             </div>
@@ -182,7 +205,7 @@ const AgentSection = () => {
             </p>
           </div>
           <div className="grid lg:grid-cols-2 gap-12">
-            <div className="md:animate-on-scroll">
+            <div className="animate-on-scroll">
               <div className="bg-white rounded-2xl shadow-xl border border-slate-200 md:p-8 px-2 py-5">
                 <h3 className="md:text-2xl text-lg font-bold text-slate-900 mb-6">
                   Agent Registration
@@ -239,8 +262,10 @@ const AgentSection = () => {
                           name="phone"
                           value={formData.phone}
                           onChange={handleInputChange}
+                          maxLength={10}
+                          minLength={10}
                           required
-                          placeholder="+233 XX XXX XXXX"
+                          placeholder="eg. 0201234567"
                           className="w-full pl-10 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200"
                         />
                       </div>
@@ -257,7 +282,9 @@ const AgentSection = () => {
                           value={formData.whatsapp}
                           onChange={handleInputChange}
                           required
-                          placeholder="+233 XX XXX XXXX"
+                          maxLength={10}
+                          minLength={10}
+                          placeholder="eg. 0201234567"
                           className="w-full pl-10 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200"
                         />
                       </div>
@@ -442,9 +469,18 @@ const AgentSection = () => {
 
                   <button
                     type="submit"
+                    disabled={loading}
                     className="w-full bg-primary text-white py-2 rounded-lg font-semibold text-sm hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl"
                   >
-                    {loading ? "Submitting..." : "Complete Registration"}
+                    {loading ? (
+                      <CircularProgress
+                        size={16}
+                        thickness={10}
+                        style={{ color: "white" }}
+                      />
+                    ) : (
+                      "Complete Registration"
+                    )}
                   </button>
 
                   <p className="text-sm text-slate-500 text-center leading-relaxed">
@@ -467,7 +503,7 @@ const AgentSection = () => {
                 </form>
               </div>
             </div>
-            <div className="space-y-8 md:animate-on-scroll">
+            <div className="space-y-8 animate-on-scroll">
               <div className="bg-primary/5 rounded-2xl p-8 border border-primary/10">
                 <h3 className="md:text-2xl text-lg font-bold text-slate-900 mb-6">
                   Why Join Onukpa Agent Network?

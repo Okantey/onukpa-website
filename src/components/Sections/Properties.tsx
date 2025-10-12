@@ -27,7 +27,7 @@ const Properties = () => {
   return (
     <section id="properties" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16 md:animate-on-scroll">
+        <div className="text-center mb-16 animate-on-scroll">
           <h2 className="text-3xl font-bold text-slate-900 mb-4">
             What You Can Find
           </h2>
@@ -40,7 +40,7 @@ const Properties = () => {
           {properties.map((property, index) => (
             <div
               key={index}
-              className="md:animate-on-scroll group bg-white rounded-xl p-6 text-center border border-slate-200 hover:border-primary transition-all duration-300 hover:shadow-lg"
+              className="animate-on-scroll group bg-white rounded-xl p-6 text-center border border-slate-200 hover:border-primary transition-all duration-300 hover:shadow-lg"
             >
               <div className="w-14 h-14 bg-primary rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                 <property.icon className="w-6 h-6 text-white" />

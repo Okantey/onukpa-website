@@ -2,7 +2,7 @@ import favicon from "../../assets/favicon.png";
 
 const WhatsAppMockup = () => {
   return (
-    <div className="relative md:animate-on-scroll">
+    <div className="relative animate-on-scroll">
       <div className="relative bg-white rounded-2xl shadow-xl p-6 border border-slate-200">
         <div className="bg-primary rounded-t-xl rounded-b-lg p-4 -mx-6 -mt-6 mb-4">
           <div className="flex items-center space-x-3">
