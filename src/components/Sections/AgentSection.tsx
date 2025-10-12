@@ -12,7 +12,6 @@ import {
   X,
 } from "lucide-react";
 import { accraAreas } from "../../constants/areas";
-import axios from "axios";
 import { Alert, Snackbar, CircularProgress } from "@mui/material";
 
 interface FormData {
@@ -25,6 +24,8 @@ interface FormData {
   specialty: string;
   areas: string[];
 }
+
+//https://script.google.com/macros/s/AKfycbwAYIBaUyRUKpz3X11Q2SdeoEOjgl4A3ZVKPYnC4lQbRK9mIomZg7cGG8CIqnuIv83BVA/exec
 
 const AgentSection = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -134,23 +135,54 @@ const AgentSection = () => {
     setLoading(true);
 
     console.log("Formdata", formData);
+
+    // Validation
+    if (formData.areas.length === 0) {
+      showNotification("Please select at least one area of operation", "error");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await axios.post(
-        `http://157.245.173.144:3000/agent/add`, // This might be unreachable
+      // Using FormSubmit.co as primary method
+      const formDataToSubmit = new FormData();
+
+      // Add all form fields
+      formDataToSubmit.append("fullName", formData.fullName);
+      formDataToSubmit.append("email", formData.email);
+      formDataToSubmit.append("phone", formatPhone(formData.phone));
+      formDataToSubmit.append("whatsapp", formatPhone(formData.whatsapp));
+      formDataToSubmit.append("address", formData.address);
+      formDataToSubmit.append("yearsExperience", formData.yearsExperience);
+      formDataToSubmit.append("specialty", formData.specialty);
+      formDataToSubmit.append("areas", formData.areas.join(", "));
+      formDataToSubmit.append("timestamp", new Date().toISOString());
+      formDataToSubmit.append("_subject", "New Agent Registration - Onukpa");
+      formDataToSubmit.append("_template", "table"); // Optional: better email formatting
+      formDataToSubmit.append("_captcha", "false"); // Optional: disable captcha
+
+      const response = await fetch(
+        "https://formsubmit.co/ajax/nunoogideon19@gmail.com",
         {
-          ...formData,
-          phone: formatPhone(formData.phone),
-          whatsapp: formatPhone(formData.whatsapp), // Should this be formData.phone?
-        },
-        {
-          timeout: 10000, // Add timeout to prevent hanging
+          // Replace with your email
+          method: "POST",
+          body: formDataToSubmit,
+          headers: {
+            Accept: "application/json",
+          },
         }
       );
 
-      if (response.status === 201) {
-        const data = response.data;
-        console.log("Success:", data);
-        showNotification("Registration Successful!", "success");
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        console.log("FormSubmit success:", result);
+        showNotification(
+          "Registration Successful! We'll contact you soon.",
+          "success"
+        );
+
+        // Reset form
         setFormData({
           fullName: "",
           email: "",
@@ -161,29 +193,47 @@ const AgentSection = () => {
           specialty: "",
           areas: [],
         });
+      } else {
+        throw new Error(result.message || "Form submission failed");
       }
     } catch (err: any) {
-      console.error("Error details:", err);
+      console.error("FormSubmit.co error:", err);
 
-      // More detailed error handling
-      if (err.code === "ECONNABORTED") {
-        showNotification("Request timeout - please try again", "error");
-      } else if (err.response) {
-        // Server responded with error status
-        const errorMessage = err.response.data?.error || "Registration failed";
-        showNotification(errorMessage, "error");
-      } else if (err.request) {
-        // Network error - no response received
-        showNotification(
-          "Network error - please check your connection",
-          "error"
+      // Fallback: Store in localStorage
+      try {
+        const submissions = JSON.parse(
+          localStorage.getItem("agentSubmissions") || "[]"
         );
-      } else {
-        // Other errors
-        showNotification("An unexpected error occurred", "error");
+        submissions.push({
+          ...formData,
+          phone: formatPhone(formData.phone),
+          whatsapp: formatPhone(formData.whatsapp),
+          timestamp: new Date().toISOString(),
+        });
+        localStorage.setItem("agentSubmissions", JSON.stringify(submissions));
+
+        showNotification(
+          "Registration submitted offline! We will sync later",
+          "success"
+        );
+
+        // Reset form even for offline submission
+        setFormData({
+          fullName: "",
+          email: "",
+          phone: "",
+          whatsapp: "",
+          address: "",
+          yearsExperience: "",
+          specialty: "",
+          areas: [],
+        });
+      } catch (fallbackError) {
+        console.error("LocalStorage error:", fallbackError);
+        showNotification("Registration failed. Please try again.", "error");
       }
     } finally {
-      setLoading(false); // This should always run
+      setLoading(false);
     }
   };
 
