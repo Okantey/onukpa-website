@@ -210,7 +210,7 @@ const Testimonials = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-8 md:mb-12 animate-on-scroll">
+        <div className="text-center mb-8 md:mb-12 md:animate-on-scroll">
           <div className="inline-flex items-center px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs md:text-sm font-medium mb-3 md:mb-4">
             <Star className="w-3 h-3 md:w-4 md:h-4 mr-1.5 md:mr-2 fill-current" />
             Loved by Students, Renters & Agents
@@ -224,7 +224,7 @@ const Testimonials = () => {
         </div>
 
         {/* Category Tabs - Mobile Optimized */}
-        <div className="flex justify-center mb-8 md:mb-12 animate-on-scroll px-2">
+        <div className="flex justify-center mb-8 md:mb-12 md:animate-on-scroll px-2">
           <div className="inline-flex bg-white rounded-xl md:rounded-2xl p-1 md:p-2 border border-slate-200 shadow-sm w-full max-w-md">
             {[
               {
@@ -275,7 +275,7 @@ const Testimonials = () => {
 
         {/* Main Testimonial Carousel - Mobile Optimized */}
         <div className="max-w-4xl mx-auto mb-8 md:mb-12 px-2">
-          <div className="relative bg-white rounded-2xl md:rounded-3xl shadow-lg md:shadow-xl border border-slate-200 p-4 md:p-8 lg:p-12 animate-on-scroll">
+          <div className="relative bg-white rounded-2xl md:rounded-3xl shadow-lg md:shadow-xl border border-slate-200 p-4 md:p-8 lg:p-12 md:animate-on-scroll">
             {/* Quote Icon - Mobile Adjusted */}
             <div className="absolute -top-3 -left-3 md:-top-4 md:-left-4 w-8 h-8 md:w-12 md:h-12 bg-primary rounded-xl md:rounded-2xl flex items-center justify-center shadow-md md:shadow-lg">
               <Quote className="w-4 h-4 md:w-6 md:h-6 text-white" />
@@ -356,7 +356,7 @@ const Testimonials = () => {
         </div>
 
         {/* Stats Bar - Mobile Optimized */}
-        <div className="grid grid-cols-2 gap-3 md:gap-6 max-w-3xl mx-auto mb-12 md:mb-16 animate-on-scroll px-2">
+        <div className="grid grid-cols-2 gap-3 md:gap-6 max-w-3xl mx-auto mb-12 md:mb-16 md:animate-on-scroll px-2">
           {[
             { number: "2k+", label: "Happy Users" },
             { number: "2k+", label: "WhatsApp Contacts" },
@@ -412,7 +412,7 @@ const Testimonials = () => {
           ].map((section, index) => (
             <div
               key={section.category}
-              className="bg-white rounded-xl md:rounded-2xl p-4 md:p-6 border border-slate-200 hover:shadow-md md:hover:shadow-lg transition-all duration-300 animate-on-scroll"
+              className="bg-white rounded-xl md:rounded-2xl p-4 md:p-6 border border-slate-200 hover:shadow-md md:hover:shadow-lg transition-all duration-300 md:animate-on-scroll"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="text-3xl md:text-4xl mb-3 md:mb-4">
@@ -440,7 +440,7 @@ const Testimonials = () => {
         </div>
 
         {/* CTA - Mobile Optimized */}
-        <div className="text-center animate-on-scroll px-2">
+        <div className="text-center md:animate-on-scroll px-2">
           <div className="bg-primary rounded-xl md:rounded-2xl p-6 md:p-8 lg:p-12 text-white">
             <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-3 md:mb-4">
               Ready to Experience the Difference?

@@ -7,7 +7,7 @@ const Hero = () => {
     <section className="pt-8 md:pt-16 pb-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="animate-on-scroll">
+          <div className="md:animate-on-scroll">
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-6">
               <MessageCircle className="w-4 h-4 mr-2" />
               Powered by WhatsApp

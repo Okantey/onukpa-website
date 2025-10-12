@@ -168,7 +168,7 @@ const AgentSection = () => {
     <>
       <section id="agents" className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 animate-on-scroll">
+          <div className="text-center mb-16 md:animate-on-scroll">
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-4">
               🏆 Exclusive for Real Estate Professionals
             </div>
@@ -182,7 +182,7 @@ const AgentSection = () => {
             </p>
           </div>
           <div className="grid lg:grid-cols-2 gap-12">
-            <div className="animate-on-scroll">
+            <div className="md:animate-on-scroll">
               <div className="bg-white rounded-2xl shadow-xl border border-slate-200 md:p-8 px-2 py-5">
                 <h3 className="md:text-2xl text-lg font-bold text-slate-900 mb-6">
                   Agent Registration
@@ -467,7 +467,7 @@ const AgentSection = () => {
                 </form>
               </div>
             </div>
-            <div className="space-y-8 animate-on-scroll">
+            <div className="space-y-8 md:animate-on-scroll">
               <div className="bg-primary/5 rounded-2xl p-8 border border-primary/10">
                 <h3 className="md:text-2xl text-lg font-bold text-slate-900 mb-6">
                   Why Join Onukpa Agent Network?

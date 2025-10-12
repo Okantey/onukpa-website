@@ -17,7 +17,7 @@ const Stats = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
           {stats.map((stat, index) => (
-            <div key={index} className="animate-on-scroll">
+            <div key={index} className="md:animate-on-scroll">
               <stat.icon className="w-12 h-12 text-primary mx-auto mb-4" />
               <div className="md:text-3xl text-2xl font-bold mb-2">
                 {stat.number}

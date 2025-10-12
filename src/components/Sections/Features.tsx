@@ -27,7 +27,7 @@ const Features = () => {
   return (
     <section id="features" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16 animate-on-scroll">
+        <div className="text-center mb-16 md:animate-on-scroll">
           <h2 className="md:text-3xl text-2xl font-bold text-slate-900 mb-4">
             Key Features
           </h2>
@@ -40,7 +40,7 @@ const Features = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="animate-on-scroll group bg-white border border-slate-200 rounded-xl p-6 hover:border-primary transition-all duration-300 hover:shadow-lg"
+              className="md:animate-on-scroll group bg-white border border-slate-200 rounded-xl p-6 hover:border-primary transition-all duration-300 hover:shadow-lg"
             >
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform duration-300 flex-shrink-0">
