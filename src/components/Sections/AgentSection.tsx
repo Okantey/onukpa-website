@@ -162,7 +162,7 @@ const AgentSection = () => {
       formDataToSubmit.append("_captcha", "false"); // Optional: disable captcha
 
       const response = await fetch(
-        "https://formsubmit.co/ajax/nunoogideon19@gmail.com",
+        "https://formsubmit.co/ajax/0001fdfdd622301b955b6614fe9c2ed9",
         {
           // Replace with your email
           method: "POST",
