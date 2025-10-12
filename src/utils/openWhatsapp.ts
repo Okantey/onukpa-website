@@ -1,5 +1,5 @@
 const phoneNumber = "+233245095569";
-const message = "Hi Onukpa! I need help finding a place to rent";
+const message = "Hi";
 
 const handleWhatsAppClick = () => {
   const encodedMessage = encodeURIComponent(message);
