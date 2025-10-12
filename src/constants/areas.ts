@@ -52,7 +52,6 @@ export const accraAreas = [
   "Israel",
   "Ablekuma",
   "North Odorkor",
-  "South Odorkor",
 
   // Business & Commercial Districts
   "Airport City",
@@ -65,7 +64,6 @@ export const accraAreas = [
   "Circle",
   "Kwame Nkrumah Interchange",
   "Tudu",
-  "Kokomlemle",
   "Abossey Okai",
   "Agbogbloshie",
 

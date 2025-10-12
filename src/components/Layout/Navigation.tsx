@@ -13,8 +13,6 @@ const Navigation = () => {
     { name: "For Agents", href: "#agents" },
   ];
 
-  console.log(window.location.host);
-
   const handleNavClick = (href: string) => {
     setIsMenuOpen(false);
 
