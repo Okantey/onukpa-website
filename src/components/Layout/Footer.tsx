@@ -99,7 +99,7 @@ const Footer = () => {
                 />
               </div>
 
-              <p className="text-lg text-slate-300 max-w-md leading-relaxed">
+              <p className="text-base text-slate-300 max-w-md leading-relaxed">
                 Ghana's fastest-growing rental platform powered by WhatsApp.
                 Connecting renters with verified agents instantly.
               </p>
