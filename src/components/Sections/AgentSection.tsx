@@ -144,39 +144,28 @@ const AgentSection = () => {
     }
 
     try {
-      // Using FormSubmit.co as primary method
-      const formDataToSubmit = new FormData();
-
-      // Add all form fields
-      formDataToSubmit.append("fullName", formData.fullName);
-      formDataToSubmit.append("email", formData.email);
-      formDataToSubmit.append("phone", formatPhone(formData.phone));
-      formDataToSubmit.append("whatsapp", formatPhone(formData.whatsapp));
-      formDataToSubmit.append("address", formData.address);
-      formDataToSubmit.append("yearsExperience", formData.yearsExperience);
-      formDataToSubmit.append("specialty", formData.specialty);
-      formDataToSubmit.append("areas", formData.areas.join(", "));
-      formDataToSubmit.append("timestamp", new Date().toISOString());
-      formDataToSubmit.append("_subject", "New Agent Registration - Onukpa");
-      formDataToSubmit.append("_template", "table"); // Optional: better email formatting
-      formDataToSubmit.append("_captcha", "false"); // Optional: disable captcha
-
-      const response = await fetch(
-        "https://formsubmit.co/ajax/0001fdfdd622301b955b6614fe9c2ed9",
-        {
-          // Replace with your email
-          method: "POST",
-          body: formDataToSubmit,
-          headers: {
-            Accept: "application/json",
-          },
-        }
-      );
+      // Primary: Send to your API
+      const response = await fetch("https://api.onukpa.com/agent/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formatPhone(formData.phone),
+          whatsapp: formatPhone(formData.whatsapp),
+          address: formData.address,
+          yearsExperience: formData.yearsExperience,
+          specialty: formData.specialty,
+          areas: formData.areas,
+        }),
+      });
 
       const result = await response.json();
 
-      if (response.ok && result.success) {
-        console.log("FormSubmit success:", result);
+      if (response.ok) {
+        console.log("API success:", result);
         showNotification(
           "Registration Successful! We'll contact you soon.",
           "success"
@@ -194,43 +183,98 @@ const AgentSection = () => {
           areas: [],
         });
       } else {
-        throw new Error(result.message || "Form submission failed");
+        showNotification(`${result.message}`, "error");
       }
     } catch (err: any) {
-      console.error("FormSubmit.co error:", err);
+      console.error("API error:", err);
 
-      // Fallback: Store in localStorage
+      // Fallback 1: Try FormSubmit.co
       try {
-        const submissions = JSON.parse(
-          localStorage.getItem("agentSubmissions") || "[]"
-        );
-        submissions.push({
-          ...formData,
-          phone: formatPhone(formData.phone),
-          whatsapp: formatPhone(formData.whatsapp),
-          timestamp: new Date().toISOString(),
-        });
-        localStorage.setItem("agentSubmissions", JSON.stringify(submissions));
+        console.log("Trying FormSubmit.co fallback...");
+        const formDataToSubmit = new FormData();
+        formDataToSubmit.append("fullName", formData.fullName);
+        formDataToSubmit.append("email", formData.email);
+        formDataToSubmit.append("phone", formatPhone(formData.phone));
+        formDataToSubmit.append("whatsapp", formatPhone(formData.whatsapp));
+        formDataToSubmit.append("address", formData.address);
+        formDataToSubmit.append("yearsExperience", formData.yearsExperience);
+        formDataToSubmit.append("specialty", formData.specialty);
+        formDataToSubmit.append("areas", formData.areas.join(", "));
+        formDataToSubmit.append("_subject", "New Agent Registration - Onukpa");
+        formDataToSubmit.append("_captcha", "false");
 
-        showNotification(
-          "Registration submitted offline! We will sync later",
-          "success"
+        const fallbackResponse = await fetch(
+          "https://formsubmit.co/ajax/0001fdfdd622301b955b6614fe9c2ed9",
+          {
+            method: "POST",
+            body: formDataToSubmit,
+            headers: {
+              Accept: "application/json",
+            },
+          }
         );
 
-        // Reset form even for offline submission
-        setFormData({
-          fullName: "",
-          email: "",
-          phone: "",
-          whatsapp: "",
-          address: "",
-          yearsExperience: "",
-          specialty: "",
-          areas: [],
-        });
+        const fallbackResult = await fallbackResponse.json();
+
+        if (fallbackResponse.ok && fallbackResult.success) {
+          console.log("FormSubmit.co fallback success");
+          showNotification(
+            "Registration submitted! We've received your details.",
+            "success"
+          );
+
+          // Reset form
+          setFormData({
+            fullName: "",
+            email: "",
+            phone: "",
+            whatsapp: "",
+            address: "",
+            yearsExperience: "",
+            specialty: "",
+            areas: [],
+          });
+        } else {
+          throw new Error("FormSubmit also failed");
+        }
       } catch (fallbackError) {
-        console.error("LocalStorage error:", fallbackError);
-        showNotification("Registration failed. Please try again.", "error");
+        console.error("FormSubmit.co fallback error:", fallbackError);
+
+        // Fallback 2: Store in localStorage
+        try {
+          const submissions = JSON.parse(
+            localStorage.getItem("agentSubmissions") || "[]"
+          );
+          submissions.push({
+            id: Date.now().toString(),
+            ...formData,
+            phone: formatPhone(formData.phone),
+            whatsapp: formatPhone(formData.whatsapp),
+            timestamp: new Date().toISOString(),
+            status: "pending_sync",
+          });
+          localStorage.setItem("agentSubmissions", JSON.stringify(submissions));
+
+          showNotification(
+            "Registration saved offline! We'll sync when you're back online.",
+            "success"
+          );
+
+          // Reset form
+          setFormData({
+            fullName: "",
+            email: "",
+            phone: "",
+            whatsapp: "",
+            address: "",
+            yearsExperience: "",
+            specialty: "",
+            areas: [],
+          });
+        } catch (localStorageError) {
+          console.error("LocalStorage error:", localStorageError);
+          showNotification("Registration failed. Please try again.", "error");
+        }
       }
     } finally {
       setLoading(false);
