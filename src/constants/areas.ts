@@ -102,7 +102,6 @@ export const accraAreas = [
   "La Palm",
 
   // Traditional & Historical Areas
-  "Jamestown",
   "Usher Town",
   "Christiansborg",
   "Osu Castle",
