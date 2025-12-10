@@ -13,7 +13,7 @@ export default defineConfig({
     allowedHosts: [
       "www.onukpa.com",
       "onukpa.com",
-      "https://onukpa-oecb7.ondigitalocean.app",
+      "onukpa-oecb7.ondigitalocean.app",
     ],
   },
 });
