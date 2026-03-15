@@ -1,4 +1,4 @@
-import { MessageCircle, Shield, Bell } from "lucide-react";
+import { MessageCircle, Shield, Bell, HeartHandshake, Send } from "lucide-react";
 import handleWhatsAppClick from "../../utils/openWhatsapp";
 
 const HowItWorks = () => {
@@ -6,33 +6,43 @@ const HowItWorks = () => {
     {
       icon: MessageCircle,
       title: "Chat on WhatsApp",
-      desc: "Tell Onukpa what you need",
+      desc: "Say hello and tell Onukpa what you need in simple language.",
     },
     {
       icon: Shield,
       title: "Get Verified Options",
-      desc: "Compare trusted listings",
+      desc: "We match you with verified rooms, apartments, hostels or offices.",
+    },
+    {
+      icon: HeartHandshake,
+      title: "Show Interest",
+      desc: "Tap \"I'm interested\" on options you like. No viewing fees.",
+    },
+    {
+      icon: Send,
+      title: "Get Connected",
+      desc: "We connect you to landlords or trusted agents directly.",
     },
     {
       icon: Bell,
       title: "Save & Get Alerts",
-      desc: "Be notified instantly when matches appear",
+      desc: "Save your search and receive new matches on WhatsApp.",
     },
   ];
 
   return (
     <section className="py-20 bg-slate-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="how-it-works">
         <div className="text-center mb-16 animate-on-scroll">
           <h2 className="md:text-3xl text-2xl font-bold text-slate-900 mb-4">
             How Onukpa Works
           </h2>
           <p className="md:text-lg text-base text-slate-600 max-w-2xl mx-auto">
-            Find your perfect place in just 3 simple steps
+            A calm, WhatsApp-first way to find a verified place in Accra.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-6">
           {steps.map((step, index) => (
             <div
               key={index}
@@ -44,7 +54,7 @@ const HowItWorks = () => {
               <div className="md:text-xl text-lg font-semibold text-slate-900 mb-2">
                 {step.title}
               </div>
-              <p className="md:text-base text-sm text-slate-600">{step.desc}</p>
+              <p className="text-base md:text-lg text-slate-600">{step.desc}</p>
             </div>
           ))}
         </div>

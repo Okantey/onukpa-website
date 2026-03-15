@@ -108,15 +108,17 @@ const TermsAndPrivacy = () => {
                           1. Introduction
                         </h3>
                         <p className="text-slate-700 mb-4">
-                          Welcome to <strong>Onukpa</strong> ("we," "our,"
-                          "us"). By using our platform, website, or WhatsApp
-                          services, you agree to these Terms & Conditions.
-                          Please read them carefully.
+                          Welcome to <strong>Onukpa</strong> ("we," "our," "us"). These Terms &
+                          Conditions govern your use of our website, WhatsApp assistant and any
+                          related services. By using Onukpa, you agree to these terms. If you do
+                          not agree, please do not use the service.
                         </p>
                         <p className="text-slate-700">
-                          Onukpa connects users looking for verified rooms,
-                          apartments, or short stays with verified agents and
-                          property owners.
+                          Onukpa is a <strong>WhatsApp-first rental marketplace</strong> that
+                          connects renters with landlords and agents for verified rooms,
+                          apartments, hostels and commercial spaces in and around Accra. We are a
+                          facilitator and do not become a party to the final tenancy agreement
+                          between renter and landlord/agent.
                         </p>
                       </section>
 
@@ -165,21 +167,35 @@ const TermsAndPrivacy = () => {
                             <h4 className="text-lg font-semibold text-slate-900 mb-3">
                               4. Verification and Payments
                             </h4>
+                            <p className="text-slate-700 mb-3">
+                              Onukpa&apos;s goal is to remove unnecessary viewing fees and make
+                              rental payments more transparent. In practice, this means:
+                            </p>
                             <ul className="text-slate-700 space-y-2">
                               <li className="flex items-start">
                                 <Check className="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
-                                Onukpa does not directly collect payments for
-                                rentals unless stated.
+                                Onukpa does not charge viewing fees. You should not pay anyone
+                                simply to view a property advertised through Onukpa.
                               </li>
                               <li className="flex items-start">
                                 <Check className="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
-                                Always confirm payment details with verified
-                                Onukpa agents before sending money.
+                                Where applicable, Onukpa may charge a success-based service fee
+                                after a rental is confirmed through our platform (for example, 5%
+                                on landlord-direct rentals or 10% total on agent-assisted rentals,
+                                with a share going to the agent). Any such fees will be communicated
+                                clearly before you commit.
                               </li>
                               <li className="flex items-start">
                                 <Check className="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
-                                We are not responsible for off-platform
-                                transactions made without verification.
+                                Unless we clearly state otherwise, rental deposits and rent are
+                                paid directly between renter and landlord or agent. Always confirm
+                                account details and keep proof of payment.
+                              </li>
+                              <li className="flex items-start">
+                                <Check className="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
+                                We are not responsible for private, off-platform transactions
+                                carried out without using our recommended verification or
+                                communication channels.
                               </li>
                             </ul>
                           </div>
@@ -344,24 +360,29 @@ const TermsAndPrivacy = () => {
                             1. Information We Collect
                           </h3>
                           <p className="text-slate-700 mb-4">
-                            We collect information necessary to provide our
-                            services and ensure platform safety:
+                            We only collect information needed to operate the Onukpa service,
+                            connect renters with properties, and keep the platform safe:
                           </p>
                           <ul className="text-slate-700 space-y-2">
                             <li className="flex items-start">
                               <Check className="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
-                              User and agent names, phone numbers, and location
-                              data
+                              Names and contact details (such as phone numbers and email)
+                              shared when you speak to Onukpa or fill a form
                             </li>
                             <li className="flex items-start">
                               <Check className="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
-                              Listing details and chat interactions (for quality
-                              and verification)
+                              Basic location information and property details (for example,
+                              areas you are interested in, listing descriptions or budgets)
                             </li>
                             <li className="flex items-start">
                               <Check className="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
-                              Optional media or documents submitted for
-                              verification
+                              Logs of interactions with our WhatsApp assistant (only for
+                              quality, matching and security)
+                            </li>
+                            <li className="flex items-start">
+                              <Check className="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
+                              Optional documents or media you choose to submit for verification
+                              (for example, Ghana Card details for suppliers)
                             </li>
                           </ul>
                         </section>
@@ -395,13 +416,20 @@ const TermsAndPrivacy = () => {
                           <ul className="text-slate-700 space-y-2">
                             <li className="flex items-start">
                               <Check className="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
-                              We only share user data with verified agents when
-                              a request or inquiry is made
+                              We only share your details with landlords or agents when you
+                              clearly show interest in a listing or request to be connected
                             </li>
                             <li className="flex items-start">
                               <Check className="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
                               We do not sell personal information to third
                               parties
+                            </li>
+                            <li className="flex items-start">
+                              <Check className="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
+                              We may use trusted service providers (for example, WhatsApp
+                              infrastructure providers or cloud hosting) to help deliver the
+                              service. They process data on our behalf under strict
+                              confidentiality obligations.
                             </li>
                           </ul>
                         </section>
@@ -411,8 +439,11 @@ const TermsAndPrivacy = () => {
                             4. Data Security
                           </h3>
                           <p className="text-slate-700">
-                            We use secure data handling and encryption measures
-                            to protect all user and agent information.
+                            We use reasonable technical and organisational safeguards to protect
+                            information we hold. However, no method of transmission over the
+                            internet or storage is 100% secure, so we cannot guarantee absolute
+                            security. We will notify you of any serious data incident where we
+                            are legally required to do so.
                           </p>
                         </section>
 
@@ -421,8 +452,10 @@ const TermsAndPrivacy = () => {
                             5. Retention
                           </h3>
                           <p className="text-slate-700">
-                            Data may be retained as long as needed for
-                            verification or regulatory purposes.
+                            We keep data only for as long as it is needed for matching, safety,
+                            resolving disputes, improving our service, or to meet legal and
+                            regulatory requirements. When it is no longer needed, we aim to
+                            delete or anonymise it in a reasonable timeframe.
                           </p>
                         </section>
 

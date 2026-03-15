@@ -17,16 +17,18 @@ const Footer = () => {
   const quickLinks = [
     { name: "Properties", href: "#properties" },
     { name: "Features", href: "#features" },
+    { name: "For Landlords", href: "#landlords" },
     { name: "For Agents", href: "#agents" },
     { name: "Testimonials", href: "#testimonials" },
-    // { name: "How It Works", href: "#how-it-works" },
+    { name: "How It Works", href: "#how-it-works" },
   ];
 
   const supportLinks = [
-    { name: "Help Center", href: "#help" },
-    { name: "Contact Support", href: "#contact" },
+    { name: "WhatsApp Support", href: "https://wa.me/+233245095569" },
+    { name: "Support Email", href: "mailto:support@onukpa.com" },
     { name: "Agent Registration", href: "#agents" },
-    // { name: "FAQ", href: "#faq" },
+    { name: "Landlord Registration", href: "#landlords" },
+    { name: "FAQ", href: "#faq" },
   ];
 
   const legalLinks = [

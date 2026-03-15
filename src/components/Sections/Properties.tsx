@@ -6,21 +6,25 @@ const Properties = () => {
       icon: Home,
       label: "Rooms",
       emoji: "🏠",
+      desc: "Single rooms, chambers & halls and self-contained spaces for students and workers.",
     },
     {
       icon: Building,
       label: "Apartments",
       emoji: "🏢",
+      desc: "1–3 bedroom apartments, gated compounds and shared apartments across Accra.",
     },
     {
       icon: GraduationCap,
       label: "Campus Hostels",
       emoji: "🎓",
+      desc: "UG, UPSA and other campus hostels with clear bed counts and amenities.",
     },
     {
       icon: Store,
       label: "Stores & Offices",
       emoji: "🛍️",
+      desc: "Shops, container spaces and office units in busy commercial areas.",
     },
   ];
 
@@ -49,6 +53,9 @@ const Properties = () => {
               <div className="text-lg font-semibold text-slate-900">
                 {property.label}
               </div>
+              <p className="mt-2 text-base md:text-lg text-slate-600">
+                {property.desc}
+              </p>
             </div>
           ))}
         </div>

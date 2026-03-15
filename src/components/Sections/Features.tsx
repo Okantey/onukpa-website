@@ -50,7 +50,7 @@ const Features = () => {
                   <h3 className="md:text-xl text-lg font-semibold text-slate-900 mb-2">
                     {feature.title}
                   </h3>
-                  <p className="md:text-base text-sm text-slate-600">
+                  <p className="text-base md:text-lg text-slate-600">
                     {feature.desc}
                   </p>
                 </div>

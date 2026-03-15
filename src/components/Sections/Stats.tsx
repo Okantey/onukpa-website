@@ -22,7 +22,7 @@ const Stats = () => {
               <div className="md:text-3xl text-2xl font-bold mb-2">
                 {stat.number}
               </div>
-              <div className="md:text-base text-sm text-slate-300">
+              <div className="text-base md:text-lg text-slate-300">
                 {stat.label}
               </div>
             </div>
