@@ -1,72 +1,14 @@
 import { useState, useEffect } from "react";
-import { Eye, FileText, CheckCircle } from "lucide-react";
+import { Eye, FileText, CheckCircle, Inbox } from "lucide-react";
 import DataTable from "../components/DataTable";
 import type { Column } from "../components/DataTable";
 import FilterBar from "../components/FilterBar";
 import StatusBadge from "../components/StatusBadge";
 import DetailDrawer from "../components/DetailDrawer";
-import type { RequestStatus } from "../../constants/admin";
+import { adminApi } from "../services/adminApi";
 
-// Mock Data structure based on the requirements
-interface RequestData {
-  id: string;
-  type: string;
-  user: string;
-  phone: string;
-  area: string;
-  budget: string;
-  urgency: string;
-  status: RequestStatus;
-  savedRequest: boolean;
-  agentFallback: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-const mockRequests: RequestData[] = [
-  {
-    id: "REQ-001",
-    type: "Room",
-    user: "Kwame Mensah",
-    phone: "0241234567",
-    area: "East Legon",
-    budget: "GHS 1,500/mo",
-    urgency: "High",
-    status: "searching",
-    savedRequest: true,
-    agentFallback: true,
-    createdAt: "2026-03-14",
-    updatedAt: "2026-03-15",
-  },
-  {
-    id: "REQ-002",
-    type: "Apartment",
-    user: "Ama Osei",
-    phone: "0509876543",
-    area: "Cantonments",
-    budget: "GHS 5,000/mo",
-    urgency: "Medium",
-    status: "property_found",
-    savedRequest: true,
-    agentFallback: false,
-    createdAt: "2026-03-12",
-    updatedAt: "2026-03-14",
-  },
-  {
-    id: "REQ-003",
-    type: "CampusHostels",
-    user: "John Doe",
-    phone: "0271122334",
-    area: "Madina",
-    budget: "GHS 800/mo",
-    urgency: "Low",
-    status: "pending",
-    savedRequest: false,
-    agentFallback: true,
-    createdAt: "2026-03-15",
-    updatedAt: "2026-03-15",
-  },
-];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type RequestData = any;
 
 const RequestsPage = () => {
   const [data, setData] = useState<RequestData[]>([]);
@@ -79,11 +21,11 @@ const RequestsPage = () => {
   const [typeFilter, setTypeFilter] = useState("");
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setData(mockRequests);
-      setIsLoading(false);
-    }, 600);
+    adminApi
+      .getRequests()
+      .then(setData)
+      .catch((err) => console.error("Failed to load requests:", err))
+      .finally(() => setIsLoading(false));
   }, []);
 
   const filteredData = data.filter((req) => {
@@ -91,8 +33,8 @@ const RequestsPage = () => {
     if (typeFilter && req.type !== typeFilter) return false;
     if (
       search &&
-      !req.id.toLowerCase().includes(search.toLowerCase()) &&
-      !req.user.toLowerCase().includes(search.toLowerCase())
+      !(req.id || "").toLowerCase().includes(search.toLowerCase()) &&
+      !(req.renterName || "").toLowerCase().includes(search.toLowerCase())
     ) {
       return false;
     }
@@ -102,8 +44,7 @@ const RequestsPage = () => {
   const columns: Column<RequestData>[] = [
     {
       header: "Request ID",
-      accessorKey: "id",
-      cell: (row) => <span className="font-medium text-slate-900">{row.id}</span>,
+      cell: (row) => <span className="font-medium text-slate-900 font-mono text-xs">{String(row.id).substring(0, 8)}…</span>,
     },
     {
       header: "Type",
@@ -113,18 +54,18 @@ const RequestsPage = () => {
       header: "User",
       cell: (row) => (
         <div className="flex flex-col">
-          <span className="text-slate-900 font-medium">{row.user}</span>
+          <span className="text-slate-900 font-medium">{row.renterName}</span>
+          <span className="text-xs text-slate-500">{row.phone}</span>
         </div>
       ),
     },
-    { header: "Area", accessorKey: "area" },
     { header: "Budget", accessorKey: "budget" },
     { header: "Urgency", accessorKey: "urgency" },
     {
       header: "Status",
       cell: (row) => <StatusBadge kind="request" status={row.status} />,
     },
-    { header: "Created", accessorKey: "createdAt" },
+    { header: "Created", accessorKey: "date" },
     {
       header: "Actions",
       cell: (row) => (
@@ -160,10 +101,9 @@ const RequestsPage = () => {
             value: typeFilter,
             onChange: setTypeFilter,
             options: [
-              { value: "Room", label: "Rooms" },
-              { value: "Apartment", label: "Apartments" },
+              { value: "Rooms", label: "Rooms" },
+              { value: "Apartments", label: "Apartments" },
               { value: "CampusHostels", label: "Hostels" },
-              { value: "OfficesStores", label: "Offices" },
             ],
           },
           {
@@ -171,10 +111,10 @@ const RequestsPage = () => {
             value: statusFilter,
             onChange: setStatusFilter,
             options: [
+              { value: "active", label: "Active" },
               { value: "pending", label: "Pending" },
-              { value: "searching", label: "Searching" },
-              { value: "property_found", label: "Property Found" },
-              { value: "interested", label: "Interested" },
+              { value: "closed", label: "Closed" },
+              { value: "expired", label: "Expired" },
             ],
           },
         ]}
@@ -185,13 +125,14 @@ const RequestsPage = () => {
         columns={columns}
         isLoading={isLoading}
         onRowClick={(row) => setSelectedRequest(row)}
+        emptyMessage="No requests found. Requests from the WhatsApp bot will appear here."
       />
 
       <DetailDrawer
         isOpen={!!selectedRequest}
         onClose={() => setSelectedRequest(null)}
-        title={`Request ${selectedRequest?.id}`}
-        subtitle={`Submitted on ${selectedRequest?.createdAt}`}
+        title={`Request ${String(selectedRequest?.id || "").substring(0, 8)}`}
+        subtitle={`Submitted on ${selectedRequest?.date}`}
         actions={
           <>
             <button className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50">
@@ -217,7 +158,7 @@ const RequestsPage = () => {
               <div className="text-right">
                 <p className="text-xs text-slate-500 font-medium">Urgency</p>
                 <p className="text-sm font-semibold text-slate-900 mt-1">
-                  {selectedRequest.urgency}
+                  {selectedRequest.urgency || "N/A"}
                 </p>
               </div>
             </div>
@@ -234,18 +175,8 @@ const RequestsPage = () => {
                   <span className="font-medium text-slate-900">{selectedRequest.type}</span>
                 </div>
                 <div>
-                  <span className="block text-xs text-slate-500">Preferred Area</span>
-                  <span className="font-medium text-slate-900">{selectedRequest.area}</span>
-                </div>
-                <div>
-                  <span className="block text-xs text-slate-500">Monthly Budget</span>
+                  <span className="block text-xs text-slate-500">Budget</span>
                   <span className="font-medium text-slate-900">{selectedRequest.budget}</span>
-                </div>
-                <div>
-                  <span className="block text-xs text-slate-500">Agent Fallback Allowed?</span>
-                  <span className="font-medium text-slate-900">
-                    {selectedRequest.agentFallback ? "Yes" : "No"}
-                  </span>
                 </div>
               </div>
             </section>
@@ -256,11 +187,8 @@ const RequestsPage = () => {
             <section>
               <h3 className="text-sm font-semibold text-slate-900 mb-4">User Contact</h3>
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                <p className="font-medium text-slate-900">{selectedRequest.user}</p>
+                <p className="font-medium text-slate-900">{selectedRequest.renterName}</p>
                 <p className="text-slate-600 mt-1">📱 {selectedRequest.phone}</p>
-                <button className="mt-3 text-xs font-medium text-primary hover:underline">
-                  Trigger WhatsApp Re-engagement
-                </button>
               </div>
             </section>
 
@@ -268,11 +196,9 @@ const RequestsPage = () => {
             <section>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-semibold text-slate-900">Internal Notes</h3>
-                <button className="text-xs font-medium text-primary hover:underline">
-                  Add Note
-                </button>
               </div>
-              <div className="p-4 rounded-xl border border-dashed border-slate-300 bg-slate-50/50 text-slate-500 text-sm text-center">
+              <div className="p-4 rounded-xl border border-dashed border-slate-300 bg-slate-50/50 text-slate-500 text-sm text-center flex flex-col items-center gap-2">
+                <Inbox className="w-5 h-5 opacity-50" />
                 No notes added yet.
               </div>
             </section>

@@ -1,47 +1,13 @@
 import { useState, useEffect } from "react";
-import { Eye, HandCoins } from "lucide-react";
+import { Eye, HandCoins, Loader2, Inbox } from "lucide-react";
 import DataTable from "../components/DataTable";
 import type { Column } from "../components/DataTable";
 import FilterBar from "../components/FilterBar";
 import StatusBadge from "../components/StatusBadge";
-import type { FeeStatus } from "../../constants/admin";
+import { adminApi } from "../services/adminApi";
 
-interface FeeData {
-  id: string;
-  matchId: string;
-  renterName: string;
-  supplierName: string;
-  feePath: "landlord_direct" | "agent_assisted";
-  rentValue: string;
-  onukpaFeeAmount: string;
-  status: FeeStatus;
-  updatedAt: string;
-}
-
-const mockFees: FeeData[] = [
-  {
-    id: "FEE-401",
-    matchId: "MTC-302",
-    renterName: "Kwame Mensah",
-    supplierName: "Mr. Addo",
-    feePath: "landlord_direct",
-    rentValue: "GHS 1,200/mo (12mo)",
-    onukpaFeeAmount: "GHS 720", // 5%
-    status: "pending",
-    updatedAt: "2026-03-15",
-  },
-  {
-    id: "FEE-402",
-    matchId: "MTC-299",
-    renterName: "Sarah Baah",
-    supplierName: "Pro Agent Ghana",
-    feePath: "agent_assisted",
-    rentValue: "GHS 4,500/mo (6mo)",
-    onukpaFeeAmount: "GHS 810", // 3%
-    status: "paid",
-    updatedAt: "2026-03-14",
-  },
-];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type FeeData = any;
 
 const FeesPage = () => {
   const [data, setData] = useState<FeeData[]>([]);
@@ -52,20 +18,21 @@ const FeesPage = () => {
   const [pathFilter, setPathFilter] = useState("");
 
   useEffect(() => {
-    setTimeout(() => {
-      setData(mockFees);
-      setIsLoading(false);
-    }, 600);
+    adminApi
+      .getFees()
+      .then(setData)
+      .catch((err) => console.error("Failed to load fees:", err))
+      .finally(() => setIsLoading(false));
   }, []);
 
   const filteredData = data.filter((fee) => {
     if (statusFilter && fee.status !== statusFilter) return false;
-    if (pathFilter && fee.feePath !== pathFilter) return false;
+    if (pathFilter && fee.type !== pathFilter) return false;
     if (
       search &&
-      !fee.id.toLowerCase().includes(search.toLowerCase()) &&
-      !fee.matchId.toLowerCase().includes(search.toLowerCase()) &&
-      !fee.renterName.toLowerCase().includes(search.toLowerCase())
+      !(fee.id || "").toLowerCase().includes(search.toLowerCase()) &&
+      !(fee.matchId || "").toLowerCase().includes(search.toLowerCase()) &&
+      !(fee.renterName || "").toLowerCase().includes(search.toLowerCase())
     ) {
       return false;
     }
@@ -77,40 +44,34 @@ const FeesPage = () => {
       header: "Fee ID / Match",
       cell: (row) => (
         <div className="flex flex-col">
-          <span className="font-medium text-slate-900">{row.id}</span>
-          <span className="text-xs text-slate-500 underline cursor-pointer hover:text-primary">
-            {row.matchId}
-          </span>
+          <span className="font-medium text-slate-900 font-mono text-xs">{String(row.id).substring(0, 8)}…</span>
+          <span className="text-xs text-slate-500">{row.matchId}</span>
         </div>
       ),
     },
     {
-      header: "Entities",
+      header: "Renter",
       cell: (row) => (
-        <div className="flex flex-col text-sm">
-          <span className="text-slate-900 font-medium">{row.renterName}</span>
-          <span className="text-xs text-slate-500">to {row.supplierName}</span>
-        </div>
+        <span className="text-sm font-medium text-slate-900">{row.renterName}</span>
       ),
     },
     {
       header: "Fee Path",
       cell: (row) => (
         <span className="text-xs font-semibold py-1 px-2 rounded bg-slate-100 text-slate-700 capitalize">
-          {row.feePath.replace("_", " ")}
+          {(row.type || "").replace("_", " ")}
         </span>
       ),
     },
-    { header: "Rent Value", accessorKey: "rentValue" },
     {
       header: "Onukpa Fee",
-      cell: (row) => <span className="font-semibold text-emerald-700">{row.onukpaFeeAmount}</span>,
+      cell: (row) => <span className="font-semibold text-emerald-700">{row.amount}</span>,
     },
     {
       header: "Status",
       cell: (row) => <StatusBadge kind="fee" status={row.status} />,
     },
-    { header: "Updated", accessorKey: "updatedAt" },
+    { header: "Date", accessorKey: "dueDate" },
     {
       header: "Actions",
       cell: () => (
@@ -130,15 +91,17 @@ const FeesPage = () => {
             Track generated fees and payment status.
           </p>
         </div>
-        <div className="flex items-center gap-4 bg-emerald-50 border border-emerald-100 p-3 rounded-xl">
-          <div className="p-2 bg-emerald-100 rounded-lg text-emerald-600">
-            <HandCoins className="w-6 h-6" />
+        {data.length > 0 && (
+          <div className="flex items-center gap-4 bg-emerald-50 border border-emerald-100 p-3 rounded-xl">
+            <div className="p-2 bg-emerald-100 rounded-lg text-emerald-600">
+              <HandCoins className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-emerald-800 uppercase tracking-widest">Total Fees</p>
+              <p className="text-lg font-bold text-emerald-900 leading-none mt-1">{data.length} records</p>
+            </div>
           </div>
-          <div>
-            <p className="text-xs font-semibold text-emerald-800 uppercase tracking-widest">Pending Collection</p>
-            <p className="text-lg font-bold text-emerald-900 leading-none mt-1">GHS 18,400</p>
-          </div>
-        </div>
+        )}
       </div>
 
       <FilterBar
@@ -169,7 +132,21 @@ const FeesPage = () => {
         ]}
       />
 
-      <DataTable data={filteredData} columns={columns} isLoading={isLoading} />
+      {isLoading ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="w-6 h-6 animate-spin text-primary" />
+        </div>
+      ) : data.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 flex flex-col items-center justify-center text-center space-y-3">
+          <Inbox className="w-10 h-10 text-slate-300" />
+          <h3 className="text-sm font-semibold text-slate-700">No fee records yet</h3>
+          <p className="text-xs text-slate-500 max-w-sm">
+            Fee records are generated when a confirmed deal creates a revenue event. This section will populate as deals close on the platform.
+          </p>
+        </div>
+      ) : (
+        <DataTable data={filteredData} columns={columns} isLoading={false} />
+      )}
     </div>
   );
 };

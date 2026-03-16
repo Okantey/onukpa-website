@@ -5,51 +5,10 @@ import type { Column } from "../components/DataTable";
 import FilterBar from "../components/FilterBar";
 import StatusBadge from "../components/StatusBadge";
 import DetailDrawer from "../components/DetailDrawer";
-import type { SupplierType } from "../../constants/admin";
+import { adminApi } from "../services/adminApi";
 
-interface SupplierData {
-  id: string;
-  name: string;
-  type: SupplierType;
-  phone: string;
-  areas: string;
-  verificationStatus: "started" | "bio_completed" | "pending_review" | "verified" | "rejected" | "suspended";
-  listingsCount: number;
-  joinedAt: string;
-}
-
-const mockSuppliers: SupplierData[] = [
-  {
-    id: "SUP-201",
-    name: "Kwame Addo",
-    type: "landlord",
-    phone: "0245556666",
-    areas: "Osu, Labone",
-    verificationStatus: "verified",
-    listingsCount: 3,
-    joinedAt: "2026-01-10",
-  },
-  {
-    id: "SUP-202",
-    name: "Premium Agents HQ",
-    type: "agent",
-    phone: "0502221111",
-    areas: "East Legon, Trassaco",
-    verificationStatus: "pending_review",
-    listingsCount: 12,
-    joinedAt: "2026-03-01",
-  },
-  {
-    id: "SUP-203",
-    name: "Abla Mensah",
-    type: "landlord",
-    phone: "0278889999",
-    areas: "Madina",
-    verificationStatus: "suspended",
-    listingsCount: 0,
-    joinedAt: "2025-11-20",
-  },
-];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SupplierData = any;
 
 const SuppliersPage = () => {
   const [data, setData] = useState<SupplierData[]>([]);
@@ -61,20 +20,21 @@ const SuppliersPage = () => {
   const [statusFilter, setStatusFilter] = useState("");
 
   useEffect(() => {
-    setTimeout(() => {
-      setData(mockSuppliers);
-      setIsLoading(false);
-    }, 600);
+    adminApi
+      .getSuppliers()
+      .then(setData)
+      .catch((err) => console.error("Failed to load suppliers:", err))
+      .finally(() => setIsLoading(false));
   }, []);
 
   const filteredData = data.filter((sup) => {
     if (typeFilter && sup.type !== typeFilter) return false;
-    if (statusFilter && sup.verificationStatus !== statusFilter) return false;
+    if (statusFilter && sup.status !== statusFilter) return false;
     if (
       search &&
-      !sup.id.toLowerCase().includes(search.toLowerCase()) &&
-      !sup.name.toLowerCase().includes(search.toLowerCase()) &&
-      !sup.phone.includes(search)
+      !(sup.id || "").toLowerCase().includes(search.toLowerCase()) &&
+      !(sup.name || "").toLowerCase().includes(search.toLowerCase()) &&
+      !(sup.phone || "").includes(search)
     ) {
       return false;
     }
@@ -83,9 +43,8 @@ const SuppliersPage = () => {
 
   const columns: Column<SupplierData>[] = [
     {
-      header: "Supplier ID",
-      accessorKey: "id",
-      cell: (row) => <span className="font-medium text-slate-900">{row.id}</span>,
+      header: "ID",
+      cell: (row) => <span className="font-medium text-slate-900 font-mono text-xs">{String(row.id).substring(0, 8)}…</span>,
     },
     {
       header: "Name",
@@ -100,19 +59,11 @@ const SuppliersPage = () => {
       header: "Type",
       cell: (row) => <StatusBadge kind="supplier" status={row.type} />,
     },
-    { header: "Key Areas", accessorKey: "areas" },
     {
       header: "Verification",
-      cell: (row) => <StatusBadge kind="supplier" status={row.verificationStatus} />,
+      cell: (row) => <StatusBadge kind="supplier" status={row.status} />,
     },
-    {
-      header: "Listings",
-      accessorKey: "listingsCount",
-      cell: (row) => (
-        <span className="text-slate-600 font-medium">{row.listingsCount}</span>
-      ),
-    },
-    { header: "Joined", accessorKey: "joinedAt" },
+    { header: "Joined", accessorKey: "joinedDate" },
     {
       header: "Actions",
       cell: (row) => (
@@ -171,13 +122,14 @@ const SuppliersPage = () => {
         columns={columns}
         isLoading={isLoading}
         onRowClick={(row) => setSelectedSupplier(row)}
+        emptyMessage="No suppliers found. Landlords and agents who register via WhatsApp will appear here."
       />
 
       <DetailDrawer
         isOpen={!!selectedSupplier}
         onClose={() => setSelectedSupplier(null)}
         title={selectedSupplier?.name || "Supplier"}
-        subtitle={`ID: ${selectedSupplier?.id} • Joined ${selectedSupplier?.joinedAt}`}
+        subtitle={`ID: ${String(selectedSupplier?.id || "").substring(0, 8)} • Joined ${selectedSupplier?.joinedDate}`}
         actions={
           <>
             <button className="px-4 py-2 text-sm font-medium text-rose-700 bg-rose-50 border border-rose-200 rounded-lg hover:bg-rose-100 flex items-center gap-2">
@@ -197,14 +149,14 @@ const SuppliersPage = () => {
               <div>
                 <p className="text-xs text-slate-500 font-medium">Verification State</p>
                 <div className="mt-1">
-                  <StatusBadge kind="supplier" status={selectedSupplier.verificationStatus} />
+                  <StatusBadge kind="supplier" status={selectedSupplier.status} />
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-xs text-slate-500 font-medium">Active Properties</p>
-                <p className="text-xl font-semibold text-slate-900 mt-1">
-                  {selectedSupplier.listingsCount}
-                </p>
+                <p className="text-xs text-slate-500 font-medium">Type</p>
+                <div className="mt-1">
+                  <StatusBadge kind="supplier" status={selectedSupplier.type} />
+                </div>
               </div>
             </div>
 
@@ -216,9 +168,6 @@ const SuppliersPage = () => {
                   <Phone className="w-4 h-4 text-emerald-600" />
                   <span>{selectedSupplier.phone}</span>
                 </div>
-                <button className="mt-3 text-xs font-medium text-emerald-600 hover:text-emerald-700 hover:underline">
-                  Trigger Follow-up Message
-                </button>
               </div>
             </section>
 
