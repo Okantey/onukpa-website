@@ -40,7 +40,7 @@ const RequestsPage = () => {
   const reload = useCallback(async () => {
     const list = await adminApi.getRequests();
     setData(list);
-    setSelectedRequest((prev) => {
+    setSelectedRequest((prev: RequestData | null) => {
       if (!prev) return null;
       const id = String(prev.id ?? prev._id ?? "");
       return list.find((r: RequestData) => String(r.id ?? r._id) === id) ?? null;

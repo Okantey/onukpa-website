@@ -25,7 +25,7 @@ const SuppliersPage = () => {
   const reload = useCallback(async () => {
     const list = await adminApi.getSuppliers();
     setData(list);
-    setSelectedSupplier((prev) => {
+    setSelectedSupplier((prev: SupplierData | null) => {
       if (!prev) return null;
       const id = String(prev.id ?? prev._id ?? "");
       return list.find((s: SupplierData) => String(s.id ?? s._id) === id) ?? null;

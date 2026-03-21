@@ -29,7 +29,7 @@ const PropertiesPage = () => {
   const reload = useCallback(async () => {
     const list = await adminApi.getProperties();
     setData(list);
-    setSelectedProperty((prev) => {
+    setSelectedProperty((prev: PropertyData | null) => {
       if (!prev) return null;
       const id = String(prev.id ?? prev._id ?? "");
       const next = list.find((p: PropertyData) => String(p.id ?? p._id) === id);
