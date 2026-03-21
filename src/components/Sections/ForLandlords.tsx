@@ -87,9 +87,8 @@ const ForLandlords = () => {
                   </div>
                 </div>
                 <p className="text-sm leading-relaxed text-stone-600">
-                  Every submission is reviewed before it goes live. We verify
-                  suppliers and high-value deals with Ghana Card checks where it
-                  matters.
+                  Every submission is reviewed before it goes live. Suppliers complete
+                  ID verification on the secure portal (HTTPS), not in WhatsApp chat.
                 </p>
                 <div className="flex gap-2 rounded-xl bg-stone-50 p-3 text-xs text-stone-600">
                   <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" />

@@ -39,7 +39,10 @@ const RegisterLandlordPage = () => {
                 Say you are a landlord (e.g. reply <span className="font-medium">landlord</span>{" "}
                 when prompted, or follow the menu).
               </li>
-              <li>Complete the short profile steps in chat.</li>
+              <li>
+                Complete name and role in chat — we send you a link; add Ghana Card on the
+                portal when you are ready.
+              </li>
               <li>
                 Open the <span className="font-medium">supplier portal</span> link we send you to
                 add properties and track review status.

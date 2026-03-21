@@ -31,12 +31,12 @@ const faqs: FAQItem[] = [
   {
     question: "How do landlords list on Onukpa?",
     answer:
-      "Register via WhatsApp or the web, then use your secure link to add properties one at a time. Each listing is reviewed before it goes live.",
+      "On WhatsApp, open *Agent / Landlord portal* (option 4), join as a landlord, then use the secure link we send to add properties. Each listing is reviewed before it goes live.",
   },
   {
     question: "How do agents join Onukpa?",
     answer:
-      "Message the Onukpa bot on WhatsApp, choose the agent path, and complete onboarding in chat. You’ll receive a secure link to submit listings when you’re approved.",
+      "Message the Onukpa bot, choose *Agent / Landlord portal* (option 4), then *Join as an agent*. After onboarding in chat you get a secure link to submit listings. Use *New portal link* in that menu if the link expires.",
   },
   {
     question: "How does Onukpa make money?",

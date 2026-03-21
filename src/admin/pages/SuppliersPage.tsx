@@ -235,14 +235,16 @@ const SuppliersPage = () => {
               <h3 className="text-sm font-semibold text-slate-900 mb-4">Ghana Card (on file)</h3>
               {selectedSupplier.ghanaCardNumber ? (
                 <div className="p-4 rounded-xl border border-slate-200 bg-slate-50">
-                  <p className="text-xs text-slate-500 mb-1">Number collected during WhatsApp onboarding</p>
+                  <p className="text-xs text-slate-500 mb-1">
+                    Submitted through the supplier portal (HTTPS)
+                  </p>
                   <p className="font-mono text-sm text-slate-900">{selectedSupplier.ghanaCardNumber}</p>
                 </div>
               ) : (
                 <div className="w-full min-h-[5rem] bg-slate-100 border-2 border-dashed border-slate-300 rounded-xl flex items-center justify-center text-slate-500 text-sm px-4 text-center">
                   <div>
                     <ShieldCheck className="w-6 h-6 mx-auto mb-2 opacity-50" />
-                    No Ghana Card number on file (skipped or not captured yet).
+                    No Ghana Card on file yet (supplier can add it from their magic link).
                   </div>
                 </div>
               )}

@@ -1,5 +1,8 @@
 import { apiGet, apiPatch, apiPost } from "./http";
 
+const supplierApiBase = () =>
+  (import.meta.env.VITE_ONUKPA_API_BASE_URL || "https://api.onukpa.com").replace(/\/$/, "");
+
 export interface SupplierMediaItem {
   url: string;
   publicId?: string;
@@ -49,6 +52,48 @@ export async function fetchSupplierProperties(token: string) {
   );
 }
 
+/** Verification summary for supplier portal (no raw Ghana Card in response). */
+export async function fetchSupplierProfile(token: string) {
+  return apiGet<{
+    ok: boolean;
+    verificationStatus: string;
+    hasGhanaCardOnFile: boolean;
+  }>(`/api/supplier/profile?token=${encodeURIComponent(token)}`);
+}
+
+export async function patchSupplierProfileGhanaCard(
+  token: string,
+  ghanaCardNumber: string
+): Promise<
+  | { ok: true; verificationStatus: string; hasGhanaCardOnFile: boolean }
+  | { ok: false; message: string }
+> {
+  const res = await fetch(
+    `${supplierApiBase()}/api/supplier/profile?token=${encodeURIComponent(token)}`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ ghanaCardNumber }),
+    }
+  );
+  const data = (await res.json()) as Record<string, unknown>;
+  if (!res.ok) {
+    const message =
+      typeof data.message === "string"
+        ? data.message
+        : typeof data.error === "string"
+          ? data.error
+          : `Request failed (${res.status})`;
+    return { ok: false, message };
+  }
+  return {
+    ok: true,
+    verificationStatus: String(data.verificationStatus ?? ""),
+    hasGhanaCardOnFile: Boolean(data.hasGhanaCardOnFile),
+  };
+}
+
 export async function fetchSupplierProperty(token: string, propertyId: string) {
   return apiGet<{ ok: boolean; property: Record<string, unknown> }>(
     `/api/supplier/properties/${encodeURIComponent(propertyId)}?token=${encodeURIComponent(token)}`
@@ -88,7 +133,7 @@ export async function uploadSupplierPropertyImages(
   token: string,
   files: File[]
 ): Promise<SupplierMediaItem[]> {
-  const base = (import.meta.env.VITE_ONUKPA_API_BASE_URL || "").replace(/\/$/, "");
+  const base = supplierApiBase();
   if (!base) {
     throw new Error("VITE_ONUKPA_API_BASE_URL is not configured");
   }

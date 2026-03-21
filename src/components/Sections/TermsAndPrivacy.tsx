@@ -382,7 +382,8 @@ const TermsAndPrivacy = () => {
                             <li className="flex items-start">
                               <Check className="w-5 h-5 text-primary mr-2 mt-0.5 flex-shrink-0" />
                               Optional documents or media you choose to submit for verification
-                              (for example, Ghana Card details for suppliers)
+                              (for example, Ghana Card details for suppliers via the secure
+                              supplier portal)
                             </li>
                           </ul>
                         </section>
