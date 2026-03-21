@@ -1,4 +1,7 @@
-import { RENTER_BOT_AREA_CHOICES_ORDERED } from "./propertyTaxonomy";
+import {
+  PRIMARY_LOCATIONS,
+  RENTER_BOT_AREA_CHOICES_ORDERED,
+} from "./propertyTaxonomy";
 
 /**
  * Extended Accra neighborhoods for supplier listings.
@@ -168,3 +171,6 @@ export const accraAreas = [
   ...RENTER_BOT_AREA_CHOICES_ORDERED,
   ...EXTENDED_ACCRA_AREAS.filter((a) => !renterAreaSet.has(a)),
 ];
+
+/** All supplier dropdown areas after the renter bot’s first screen (option 🔟). Keep bot pagination in sync. */
+export const accraAreasBeyondPrimary = accraAreas.slice(PRIMARY_LOCATIONS.length);

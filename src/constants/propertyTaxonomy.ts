@@ -1,6 +1,7 @@
 /**
  * Canonical labels for supplier forms and bot matching.
- * Keep in sync with Backend/onukpa-bot/constants/taxonomy.ts
+ * Keep in sync with Backend/onukpa-bot/constants/taxonomy.ts and additionalAccraAreas.ts.
+ * Full area dropdown: `areas.ts` → `accraAreas`; renter “see more” uses `accraAreasBeyondPrimary`.
  */
 
 import type { CategoryKey } from "./supplierPropertyForm";
