@@ -5,6 +5,7 @@ import { uploadSupplierPropertyImages } from "../../../api/suppliers";
 import { resolveMediaUrl } from "../../../utils/mediaUrl";
 
 const MAX_PHOTOS = 10;
+const MAX_FILE_BYTES = 15 * 1024 * 1024;
 
 type Props = {
   token: string;
@@ -12,9 +13,11 @@ type Props = {
   onChange: (next: SupplierMediaItem[]) => void;
   /** Extra line for category-specific tips (simple English). */
   extraHint?: string;
+  /** When true, section is labelled as required (validation still enforced on submit). */
+  required?: boolean;
 };
 
-const PropertyPhotosSection = ({ token, media, onChange, extraHint }: Props) => {
+const PropertyPhotosSection = ({ token, media, onChange, extraHint, required }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -27,6 +30,13 @@ const PropertyPhotosSection = ({ token, media, onChange, extraHint }: Props) => 
       return;
     }
     const slice = Array.from(files).slice(0, remaining);
+    const oversized = slice.find((f) => f.size > MAX_FILE_BYTES);
+    if (oversized) {
+      setError(
+        `Each photo must be under 15MB ("${oversized.name}" is too large). Try again or use a slightly smaller export.`
+      );
+      return;
+    }
     setError(null);
     setUploading(true);
     try {
@@ -54,10 +64,12 @@ const PropertyPhotosSection = ({ token, media, onChange, extraHint }: Props) => 
 
   return (
     <div className="space-y-3">
-      <p className="text-sm font-semibold text-slate-800">Photos (optional)</p>
+      <p className="text-sm font-semibold text-slate-800">
+        Photos{required ? " (required)" : ""}
+      </p>
       <p className="text-xs text-slate-500">
-        JPEG, PNG or WebP, up to 5MB each. Up to {MAX_PHOTOS} images. First image is used as the
-        primary preview when live.
+        JPEG, PNG or WebP, up to 15MB each (we optimise on upload). Add at least one photo. Up to{" "}
+        {MAX_PHOTOS} images. First image is the primary preview when live.
       </p>
       {extraHint ? (
         <p className="text-xs text-slate-600 leading-relaxed">{extraHint}</p>

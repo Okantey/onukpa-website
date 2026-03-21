@@ -87,7 +87,8 @@ function hostelCopy(): SupplierFieldCopy {
     suitableHint: "Optional. Which students or workers is this for?",
     landmarkPlaceholder: "e.g. 5 min walk to UG main gate",
     landmarkHint: "Optional. Help students know how close to school you are.",
-    subtypeHint: "Pick the room style (same as our campus hostel search on WhatsApp).",
+    subtypeHint:
+      "How many share the sleeping space — 1, 2, 3 or 4 in a room (same options as the WhatsApp hostel search).",
     monthlyHint: BASE_MONTHLY_HINT,
     areaHint: BASE_AREA_HINT,
     availabilityHint: BASE_AVAIL_HINT,

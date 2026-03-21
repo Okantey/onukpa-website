@@ -55,11 +55,11 @@ const Hero = () => {
                   href="#landlords"
                   className="inline-flex items-center justify-center rounded-xl border border-stone-300 bg-white px-5 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-400 hover:bg-stone-50"
                 >
-                  Agent / Landlord portal
+                  Join as a landlord
                 </a>
                 <a
                   href="#for-agents"
-                  className="inline-flex items-center justify-center rounded-xl border border-transparent px-5 py-3 text-sm font-semibold text-stone-600 underline decoration-stone-300 underline-offset-4 hover:text-stone-900"
+                  className="inline-flex items-center justify-center rounded-xl border border-stone-300 bg-white px-5 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-400 hover:bg-stone-50"
                 >
                   Join as an agent
                 </a>

@@ -89,6 +89,11 @@ const AddPropertyPage = () => {
     e.preventDefault();
     if (!category) return;
 
+    if (media.length < 1) {
+      setError("Add at least one photo so renters can see the space.");
+      return;
+    }
+
     setSubmitting(true);
     setError(null);
     try {
@@ -206,6 +211,7 @@ const AddPropertyPage = () => {
                 media={media}
                 onChange={setMedia}
                 extraHint={copy.photoHint}
+                required
               />
 
               <div className="grid md:grid-cols-2 gap-4">

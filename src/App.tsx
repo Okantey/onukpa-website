@@ -21,6 +21,7 @@ import AuditPage from "./admin/pages/AuditPage";
 import { AuthProvider } from "./admin/context/AuthContext";
 import AdminRouteGuard from "./admin/components/AdminRouteGuard";
 import LoginPage from "./admin/pages/LoginPage";
+import NotFoundPage from "./components/Pages/NotFoundPage";
 import { Outlet } from "react-router-dom";
 
 const App = () => {
@@ -77,6 +78,7 @@ const App = () => {
             </Route>
           </Route>
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );

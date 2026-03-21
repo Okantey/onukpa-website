@@ -52,6 +52,14 @@ export const STORE_OFFICE_TYPES: Record<number, string> = {
   4: "Mixed use",
 };
 
+/** Shared with bot `HOSTEL_OCCUPANCY_TYPES` — beds per room (campus hostel style). */
+export const HOSTEL_OCCUPANCY_TYPES: Record<number, string> = {
+  1: "1 in a room",
+  2: "2 in a room",
+  3: "3 in a room",
+  4: "4 in a room",
+};
+
 export const ROOM_TYPE_OPTIONS = Object.keys(ROOM_TYPES)
   .map(Number)
   .sort((a, b) => a - b)
@@ -67,7 +75,10 @@ export const STORE_OFFICE_TYPE_OPTIONS = Object.keys(STORE_OFFICE_TYPES)
   .sort((a, b) => a - b)
   .map((k) => STORE_OFFICE_TYPES[k]!);
 
-export const HOSTEL_ROOM_STYLE_OPTIONS = ROOM_TYPE_OPTIONS;
+export const HOSTEL_OCCUPANCY_OPTIONS = Object.keys(HOSTEL_OCCUPANCY_TYPES)
+  .map(Number)
+  .sort((a, b) => a - b)
+  .map((k) => HOSTEL_OCCUPANCY_TYPES[k]!);
 
 export function subtypeOptionsForCategory(category: CategoryKey | null): string[] {
   if (!category) return [];
@@ -79,7 +90,7 @@ export function subtypeOptionsForCategory(category: CategoryKey | null): string[
     case "office":
       return [...STORE_OFFICE_TYPE_OPTIONS];
     case "hostel":
-      return [...HOSTEL_ROOM_STYLE_OPTIONS];
+      return [...HOSTEL_OCCUPANCY_OPTIONS];
     default:
       return [];
   }

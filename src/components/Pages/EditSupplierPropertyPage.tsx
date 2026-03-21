@@ -146,6 +146,11 @@ const EditSupplierPropertyPage = () => {
     e.preventDefault();
     if (!token || !propertyId || !category) return;
 
+    if (media.length < 1) {
+      setSaveError("Add at least one photo so renters can see the space.");
+      return;
+    }
+
     setSubmitting(true);
     setSaveError(null);
     try {
@@ -261,6 +266,7 @@ const EditSupplierPropertyPage = () => {
                 media={media}
                 onChange={setMedia}
                 extraHint={category ? copy.photoHint : undefined}
+                required
               />
 
               <div className="grid md:grid-cols-2 gap-4">

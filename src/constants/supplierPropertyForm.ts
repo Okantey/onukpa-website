@@ -120,6 +120,6 @@ export function buildPropertyPayload(
     availabilityStatus: state.availabilityStatus,
     suitableFor: state.suitableFor || undefined,
     attributes,
-    media: state.media.length > 0 ? state.media : undefined,
+    media: state.media,
   };
 }
