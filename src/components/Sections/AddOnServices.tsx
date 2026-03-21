@@ -22,11 +22,11 @@ const AddOnServices = () => {
     },
     {
       icon: PaintRoller,
-      title: "Electrician & painter",
+      title: "Electricians, Plumbers & Painters",
       status: "Rolling out",
       desc: "Small fixes so you settle in faster.",
       image: LANDING_IMAGES.addonElectricianPainter,
-      imageAlt: "Electrician working on home wiring",
+      imageAlt: "Electricians, Plumbers & Painters working on home repairs",
     },
   ];
 
