@@ -44,7 +44,9 @@ Payload mapping to `Property` is implemented in `services/supplierListing.ts` (c
 
 ### CORS
 
-Production origins plus local Vite dev are allowed (`http://localhost:5173`, …). For other origins set `CORS_ORIGIN`. `credentials: true` is enabled so cookie/header auth can be used consistently with `axios` `withCredentials` if you add cookies later.
+Production origins plus local Vite dev are allowed (`http://localhost:5173`, …). For extra origins set **`CORS_ORIGIN`** as a comma-separated list (e.g. `https://staging.onukpa.com,https://app.example.com`). `credentials: true` is enabled for future cookie auth.
+
+**Public HTTPS site → local API:** If you open `https://onukpa.com` in the browser but `VITE_API_URL` points at `http://localhost:3000/api`, Chrome’s **Private Network Access** rules apply. The API responds with `Access-Control-Allow-Private-Network: true` on preflight so that flow can work for debugging. For real production, build the web app with **`VITE_API_URL`** set to your **HTTPS** API host, not localhost.
 
 ## Admin API modules (Web)
 
@@ -85,6 +87,11 @@ Source: `src/admin/services/`
 ### Agent onboarding (web)
 
 - The marketing site **does not** register agents. The **For agents** section links to WhatsApp with a pre-filled message so users start onboarding in the bot.
+
+### Supplier listing fields vs bot (taxonomy)
+
+- **Subtype** on Add/Edit property uses the **same fixed strings** as the WhatsApp bot room/apartment/store options so `findMatches` `subType` filtering stays consistent. Source of truth for the bot: `Backend/onukpa-bot/constants/taxonomy.ts`; mirror for the web form: `Web/onukpa/src/constants/propertyTaxonomy.ts` (keep in sync).
+- **Area** dropdown lists **bot renter areas first** (same order), then the extended Accra list (`src/constants/areas.ts`). Campus hostel searches use **UG / UPSA** expanded to geographic `area` values in `findMatches` (see `CAMPUS_MATCH_AREA_GROUPS` in the backend taxonomy file).
 
 ### Supplier media URLs
 

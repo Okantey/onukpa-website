@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   Home,
@@ -24,6 +24,7 @@ import {
   SUPPLIER_CATEGORY_LABELS,
   buildPropertyPayload,
 } from "../../constants/supplierPropertyForm";
+import { subtypeOptionsForCategory } from "../../constants/propertyTaxonomy";
 
 const CATEGORY_ICONS: Record<
   CategoryKey,
@@ -53,6 +54,16 @@ const AddPropertyPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const subtypeChoices = category ? subtypeOptionsForCategory(category) : [];
+
+  useEffect(() => {
+    if (!category) return;
+    setSubtype((prev) => {
+      const opts = subtypeOptionsForCategory(category);
+      return opts.includes(prev) ? prev : "";
+    });
+  }, [category]);
 
   if (!token) {
     return (
@@ -204,22 +215,22 @@ const AddPropertyPage = () => {
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
                     Subtype / configuration *
                   </label>
-                  <input
-                    type="text"
+                  <select
                     value={subtype}
                     onChange={(e) => setSubtype(e.target.value)}
                     required
-                    className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                    placeholder={
-                      category === "room"
-                        ? "Single room self-contained, chamber & hall..."
-                        : category === "apartment"
-                          ? "2-bedroom, 3-bedroom, studio..."
-                          : category === "hostel"
-                            ? "4 in a room, self-contained, etc."
-                            : "Shop, office, container..."
-                    }
-                  />
+                    className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all bg-white"
+                  >
+                    <option value="">Select the type that best matches</option>
+                    {subtypeChoices.map((opt) => (
+                      <option key={opt} value={opt}>
+                        {opt}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="mt-1 text-xs text-slate-500">
+                    Same options as the WhatsApp bot so searches match your listing.
+                  </p>
                 </div>
               </div>
 

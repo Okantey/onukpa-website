@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Home,
@@ -24,6 +24,7 @@ import {
   buildPropertyPayload,
   mapPropertyDocToFormState,
 } from "../../constants/supplierPropertyForm";
+import { subtypeOptionsForCategory } from "../../constants/propertyTaxonomy";
 
 const CATEGORY_ICONS: Record<
   CategoryKey,
@@ -114,6 +115,25 @@ const EditSupplierPropertyPage = () => {
       cancelled = true;
     };
   }, [token, propertyId]);
+
+  const subtypeChoices = useMemo(
+    () => (category ? subtypeOptionsForCategory(category) : []),
+    [category]
+  );
+  const subtypeIsLegacy = Boolean(subtype && !subtypeChoices.includes(subtype));
+
+  const prevCategoryRef = useRef<CategoryKey | null>(null);
+  useEffect(() => {
+    if (!category) return;
+    const prev = prevCategoryRef.current;
+    if (prev !== null && prev !== category) {
+      setSubtype((s) => {
+        const opts = subtypeOptionsForCategory(category);
+        return opts.includes(s) ? s : "";
+      });
+    }
+    prevCategoryRef.current = category;
+  }, [category]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -244,13 +264,27 @@ const EditSupplierPropertyPage = () => {
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
                     Subtype / configuration *
                   </label>
-                  <input
-                    type="text"
+                  <select
                     value={subtype}
                     onChange={(e) => setSubtype(e.target.value)}
                     required
-                    className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                  />
+                    className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all bg-white"
+                  >
+                    <option value="">Select the type that best matches</option>
+                    {subtypeIsLegacy ? (
+                      <option value={subtype}>
+                        {subtype} (saved — choose a standard type to improve matching)
+                      </option>
+                    ) : null}
+                    {subtypeChoices.map((opt) => (
+                      <option key={opt} value={opt}>
+                        {opt}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="mt-1 text-xs text-slate-500">
+                    Same options as the WhatsApp bot so searches match your listing.
+                  </p>
                 </div>
               </div>
 

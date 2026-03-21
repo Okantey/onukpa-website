@@ -1,5 +1,10 @@
-// Comprehensive list of Accra areas and neighborhoods (expanded)
-export const accraAreas = [
+import { RENTER_BOT_AREA_CHOICES_ORDERED } from "./propertyTaxonomy";
+
+/**
+ * Extended Accra neighborhoods for supplier listings.
+ * Renter bot choices are listed first (same labels & order as WhatsApp); then the rest.
+ */
+const EXTENDED_ACCRA_AREAS: readonly string[] = [
   // High-end Residential Areas
   "East Legon",
   "West Legon",
@@ -155,4 +160,11 @@ export const accraAreas = [
   "Awoshie Onyinase",
   "Fise",
   "Ashaley Botwe School Junction",
+];
+
+const renterAreaSet = new Set(RENTER_BOT_AREA_CHOICES_ORDERED);
+
+export const accraAreas = [
+  ...RENTER_BOT_AREA_CHOICES_ORDERED,
+  ...EXTENDED_ACCRA_AREAS.filter((a) => !renterAreaSet.has(a)),
 ];
