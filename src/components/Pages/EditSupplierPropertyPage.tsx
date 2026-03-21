@@ -1,12 +1,11 @@
-import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Home,
   Building2,
   GraduationCap,
   Store,
   MapPin,
-  Tag,
   Loader2,
 } from "lucide-react";
 import Navigation from "../Layout/Navigation";
@@ -15,14 +14,15 @@ import WhatsAppFloatingButton from "../UI/WhatsappFloatingButton";
 import PropertyPhotosSection from "./supplier/PropertyPhotosSection";
 import { accraAreas } from "../../constants/areas";
 import {
-  submitPropertyWithToken,
-  type PropertyPayload,
+  fetchSupplierProperty,
+  patchSupplierProperty,
   type SupplierMediaItem,
 } from "../../api/suppliers";
 import {
   type CategoryKey,
   SUPPLIER_CATEGORY_LABELS,
   buildPropertyPayload,
+  mapPropertyDocToFormState,
 } from "../../constants/supplierPropertyForm";
 
 const CATEGORY_ICONS: Record<
@@ -35,9 +35,17 @@ const CATEGORY_ICONS: Record<
   office: Store,
 };
 
-const AddPropertyPage = () => {
-  const { token } = useParams<{ token: string }>();
-  const [category, setCategory] = useState<CategoryKey | null>("room");
+const SUPPLIER_EDITABLE_STATUSES = new Set([
+  "draft",
+  "submitted",
+  "under_review",
+  "rejected",
+]);
+
+const EditSupplierPropertyPage = () => {
+  const { token, propertyId } = useParams<{ token: string; propertyId: string }>();
+  const navigate = useNavigate();
+  const [category, setCategory] = useState<CategoryKey | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [area, setArea] = useState("");
@@ -50,32 +58,69 @@ const AddPropertyPage = () => {
   const [subtype, setSubtype] = useState("");
   const [attributes] = useState<Record<string, unknown>>({});
   const [media, setMedia] = useState<SupplierMediaItem[]>([]);
+  const [listingStatus, setListingStatus] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
-  if (!token) {
-    return (
-      <div className="min-h-screen bg-white">
-        <WhatsAppFloatingButton />
-        <Navigation />
-        <main className="pt-6 pb-16 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-xl mx-auto text-center text-sm md:text-base text-slate-700">
-            Invalid or missing property link. Please open the latest Onukpa link sent
-            to you on WhatsApp to add a property.
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (!token || !propertyId) {
+      setLoading(false);
+      setLoadError("Missing link or property.");
+      return;
+    }
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetchSupplierProperty(token, propertyId);
+        if (cancelled) return;
+        if (!res.ok || !res.property) {
+          setLoadError("We could not load this property.");
+          return;
+        }
+        const doc = res.property;
+        const status = doc.listingStatus != null ? String(doc.listingStatus) : "";
+        setListingStatus(status);
+        if (!SUPPLIER_EDITABLE_STATUSES.has(status)) {
+          setLoadError("This listing can no longer be edited from this link.");
+          return;
+        }
+        const s = mapPropertyDocToFormState(doc);
+        setCategory(s.category);
+        setSubtype(s.subtype);
+        setTitle(s.title);
+        setDescription(s.description);
+        setArea(s.area);
+        setLandmark(s.landmark);
+        setMonthlyEstimate(s.monthlyEstimate);
+        setAdvanceMonths(s.advanceMonths);
+        setTotalPayableNow(s.totalPayableNow);
+        setAvailabilityStatus(s.availabilityStatus);
+        setSuitableFor(s.suitableFor);
+        setMedia(s.media);
+        setLoadError(null);
+      } catch {
+        if (!cancelled) {
+          setLoadError("This link is invalid or has expired.");
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [token, propertyId]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!category) return;
+    if (!token || !propertyId || !category) return;
 
     setSubmitting(true);
-    setError(null);
+    setSaveError(null);
     try {
       const state = {
         category,
@@ -91,16 +136,26 @@ const AddPropertyPage = () => {
         suitableFor,
         media,
       };
-      const payload: PropertyPayload = buildPropertyPayload(state, attributes);
-
-      await submitPropertyWithToken(token, payload);
-      setSubmitted(true);
+      const payload = buildPropertyPayload(state, attributes);
+      await patchSupplierProperty(token, propertyId, payload);
+      navigate(`/supplier/portal/${encodeURIComponent(token)}`);
     } catch {
-      setError("We could not submit this property. Please try again.");
+      setSaveError("We could not save changes. Please try again.");
     } finally {
       setSubmitting(false);
     }
   };
+
+  if (!token || !propertyId) {
+    return (
+      <div className="min-h-screen bg-white">
+        <WhatsAppFloatingButton />
+        <Navigation />
+        <main className="pt-6 pb-16 px-4 text-center text-slate-700">Invalid link.</main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -108,58 +163,44 @@ const AddPropertyPage = () => {
       <Navigation />
       <main className="pt-6 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <div className="mb-8 text-center">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs md:text-sm font-medium mb-3">
-              Secure property link
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-slate-900">Edit property</h1>
+              <p className="text-slate-600 text-sm mt-1">
+                {listingStatus === "rejected"
+                  ? "Saving will send this listing back for review."
+                  : "Update details before the listing goes live."}
+              </p>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">
-              Add a property to Onukpa
-            </h1>
-            <p className="text-base md:text-lg text-slate-600 max-w-2xl mx-auto">
-              Use this secure link to add one property at a time. Our team will
-              review each listing before it goes live for renters.
-            </p>
+            <Link
+              to={`/supplier/portal/${encodeURIComponent(token)}`}
+              className="text-sm font-medium text-primary hover:underline"
+            >
+              ← Back to portal
+            </Link>
           </div>
 
-          {submitted ? (
-            <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 md:p-8 text-center space-y-4">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10">
-                <Tag className="w-6 h-6 text-primary" />
-              </div>
-              <h2 className="text-xl font-semibold text-slate-900">
-                Property submitted for review
-              </h2>
-              <p className="text-base text-slate-600 max-w-md mx-auto">
-                Thank you. The Onukpa team will review this property and, once
-                approved, start matching it to verified renter requests.
-              </p>
-              <p className="text-sm text-slate-500">
-                You can add more listings anytime with the same secure link.
-              </p>
-              {token ? (
-                <Link
-                  to={`/supplier/portal/${encodeURIComponent(token)}`}
-                  className="inline-flex items-center justify-center text-primary font-semibold hover:underline text-sm"
-                >
-                  View all my listings
-                </Link>
-              ) : null}
+          {loading ? (
+            <div className="flex justify-center py-20 text-slate-500">
+              <Loader2 className="w-10 h-10 animate-spin" />
+            </div>
+          ) : loadError ? (
+            <div className="bg-red-50 border border-red-200 text-red-800 rounded-2xl px-6 py-4 text-sm">
+              {loadError}
             </div>
           ) : (
             <form
               onSubmit={handleSubmit}
               className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 md:p-8 space-y-6"
             >
-              {error && (
+              {saveError ? (
                 <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
-                  {error}
+                  {saveError}
                 </div>
-              )}
+              ) : null}
 
               <div>
-                <p className="text-sm font-semibold text-slate-800 mb-3">
-                  Property category *
-                </p>
+                <p className="text-sm font-semibold text-slate-800 mb-3">Property category *</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {(Object.keys(SUPPLIER_CATEGORY_LABELS) as CategoryKey[]).map((key) => {
                     const label = SUPPLIER_CATEGORY_LABELS[key];
@@ -197,7 +238,6 @@ const AddPropertyPage = () => {
                     onChange={(e) => setTitle(e.target.value)}
                     required
                     className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                    placeholder="e.g. 2-bed apartment at East Legon"
                   />
                 </div>
                 <div>
@@ -210,15 +250,6 @@ const AddPropertyPage = () => {
                     onChange={(e) => setSubtype(e.target.value)}
                     required
                     className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                    placeholder={
-                      category === "room"
-                        ? "Single room self-contained, chamber & hall..."
-                        : category === "apartment"
-                          ? "2-bedroom, 3-bedroom, studio..."
-                          : category === "hostel"
-                            ? "4 in a room, self-contained, etc."
-                            : "Shop, office, container..."
-                    }
                   />
                 </div>
               </div>
@@ -233,7 +264,6 @@ const AddPropertyPage = () => {
                   required
                   rows={4}
                   className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-y"
-                  placeholder="Describe the property, key amenities, who it is ideal for and any rules."
                 />
               </div>
 
@@ -259,7 +289,6 @@ const AddPropertyPage = () => {
                     </select>
                   </div>
                 </div>
-
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
                     Landmark (optional)
@@ -269,7 +298,6 @@ const AddPropertyPage = () => {
                     value={landmark}
                     onChange={(e) => setLandmark(e.target.value)}
                     className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                    placeholder="Near which bus stop, school, etc."
                   />
                 </div>
               </div>
@@ -287,13 +315,10 @@ const AddPropertyPage = () => {
                     required
                     className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                   />
-                  <p className="mt-1 text-xs text-slate-500">
-                    We show this as a monthly amount even if you take 1–2 years advance.
-                  </p>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Advance accepted (months)
+                    Advance (months)
                   </label>
                   <input
                     type="number"
@@ -301,7 +326,6 @@ const AddPropertyPage = () => {
                     value={advanceMonths}
                     onChange={(e) => setAdvanceMonths(e.target.value)}
                     className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                    placeholder="e.g. 12 or 24"
                   />
                 </div>
                 <div>
@@ -314,7 +338,6 @@ const AddPropertyPage = () => {
                     value={totalPayableNow}
                     onChange={(e) => setTotalPayableNow(e.target.value)}
                     className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                    placeholder="If you already know the full amount"
                   />
                 </div>
               </div>
@@ -322,7 +345,7 @@ const AddPropertyPage = () => {
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Availability status *
+                    Availability *
                   </label>
                   <select
                     value={availabilityStatus}
@@ -334,7 +357,6 @@ const AddPropertyPage = () => {
                     <option value="occupied">Currently occupied</option>
                   </select>
                 </div>
-
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
                     Suitable for (optional)
@@ -344,23 +366,22 @@ const AddPropertyPage = () => {
                     value={suitableFor}
                     onChange={(e) => setSuitableFor(e.target.value)}
                     className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                    placeholder="Students, workers, small family, shop, office..."
                   />
                 </div>
               </div>
 
               <button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || !category}
                 className="w-full inline-flex items-center justify-center px-4 py-3 rounded-lg bg-primary text-white text-sm md:text-base font-semibold shadow-lg hover:bg-primary/90 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {submitting ? (
                   <>
                     <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Submitting property...
+                    Saving…
                   </>
                 ) : (
-                  "Submit property for review"
+                  "Save changes"
                 )}
               </button>
             </form>
@@ -372,4 +393,4 @@ const AddPropertyPage = () => {
   );
 };
 
-export default AddPropertyPage;
+export default EditSupplierPropertyPage;

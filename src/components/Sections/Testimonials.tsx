@@ -1,5 +1,10 @@
 import { useState } from "react";
 import { Star, Quote, ChevronLeft, ChevronRight, MapPin } from "lucide-react";
+import { openWhatsAppPrefilled } from "../../utils/openWhatsapp";
+import {
+  ONUKPA_WA_AGENT_ONBOARD,
+  ONUKPA_WA_RENTER_DEFAULT,
+} from "../../constants/whatsappContact";
 
 const Testimonials = () => {
   const [activeCategory, setActiveCategory] = useState("students");
@@ -451,21 +456,18 @@ const Testimonials = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
               <button
-                onClick={() => window.open("https://wa.me/+233245095569")}
+                type="button"
+                onClick={() => openWhatsAppPrefilled(ONUKPA_WA_RENTER_DEFAULT)}
                 className="bg-white text-primary px-6 md:px-8 py-2.5 md:py-3 rounded-lg md:rounded-xl font-semibold hover:bg-slate-100 transition-all duration-300 shadow-lg hover:scale-105 text-sm md:text-base"
               >
                 Find a Place Now
               </button>
               <button
-                onClick={() => {
-                  const element = document.getElementById("agents");
-                  if (element) {
-                    element.scrollIntoView({ behavior: "smooth" });
-                  }
-                }}
+                type="button"
+                onClick={() => openWhatsAppPrefilled(ONUKPA_WA_AGENT_ONBOARD)}
                 className="bg-transparent border border-white md:border-2 text-white px-6 md:px-8 py-2.5 md:py-3 rounded-lg md:rounded-xl font-semibold hover:bg-white/10 transition-all duration-300 hover:scale-105 text-sm md:text-base"
               >
-                Join as Agent
+                I&apos;m an agent — WhatsApp
               </button>
             </div>
           </div>

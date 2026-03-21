@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
-import { Eye, ShieldCheck, Ban, Phone } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Eye, ShieldCheck, Ban, Phone, Loader2 } from "lucide-react";
 import DataTable from "../components/DataTable";
 import type { Column } from "../components/DataTable";
 import FilterBar from "../components/FilterBar";
 import StatusBadge from "../components/StatusBadge";
 import DetailDrawer from "../components/DetailDrawer";
 import { adminApi } from "../services/adminApi";
+import { patchAdminSupplier } from "../services/suppliersApi";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SupplierData = any;
@@ -15,17 +16,31 @@ const SuppliersPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [selectedSupplier, setSelectedSupplier] = useState<SupplierData | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [actionLoading, setActionLoading] = useState(false);
 
   const [typeFilter, setTypeFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
 
+  const reload = useCallback(async () => {
+    const list = await adminApi.getSuppliers();
+    setData(list);
+    setSelectedSupplier((prev) => {
+      if (!prev) return null;
+      const id = String(prev.id ?? prev._id ?? "");
+      return list.find((s: SupplierData) => String(s.id ?? s._id) === id) ?? null;
+    });
+  }, []);
+
   useEffect(() => {
-    adminApi
-      .getSuppliers()
-      .then(setData)
+    reload()
       .catch((err) => console.error("Failed to load suppliers:", err))
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [reload]);
+
+  useEffect(() => {
+    setActionError(null);
+  }, [selectedSupplier?.id]);
 
   const filteredData = data.filter((sup) => {
     if (typeFilter && sup.type !== typeFilter) return false;
@@ -44,7 +59,11 @@ const SuppliersPage = () => {
   const columns: Column<SupplierData>[] = [
     {
       header: "ID",
-      cell: (row) => <span className="font-medium text-slate-900 font-mono text-xs">{String(row.id).substring(0, 8)}…</span>,
+      cell: (row) => (
+        <span className="font-medium text-slate-900 font-mono text-xs">
+          {String(row.id).substring(0, 8)}…
+        </span>
+      ),
     },
     {
       header: "Name",
@@ -80,6 +99,25 @@ const SuppliersPage = () => {
     },
   ];
 
+  const selectedId = selectedSupplier
+    ? String(selectedSupplier.id ?? selectedSupplier._id ?? "")
+    : "";
+  const currentStatus = selectedSupplier ? String(selectedSupplier.status) : "";
+
+  const runPatch = async (verificationStatus: string) => {
+    if (!selectedId) return;
+    setActionLoading(true);
+    setActionError(null);
+    try {
+      await patchAdminSupplier(selectedId, { verificationStatus });
+      await reload();
+    } catch (e) {
+      setActionError(e instanceof Error ? e.message : "Update failed");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -108,7 +146,9 @@ const SuppliersPage = () => {
             value: statusFilter,
             onChange: setStatusFilter,
             options: [
-              { value: "pending_review", label: "Pending Review" },
+              { value: "started", label: "Started" },
+              { value: "bio_completed", label: "Bio completed" },
+              { value: "pending_review", label: "Pending review" },
               { value: "verified", label: "Verified" },
               { value: "rejected", label: "Rejected" },
               { value: "suspended", label: "Suspended" },
@@ -132,12 +172,26 @@ const SuppliersPage = () => {
         subtitle={`ID: ${String(selectedSupplier?.id || "").substring(0, 8)} • Joined ${selectedSupplier?.joinedDate}`}
         actions={
           <>
-            <button className="px-4 py-2 text-sm font-medium text-rose-700 bg-rose-50 border border-rose-200 rounded-lg hover:bg-rose-100 flex items-center gap-2">
-              <Ban className="w-4 h-4" />
+            <button
+              type="button"
+              disabled={actionLoading || currentStatus === "suspended"}
+              onClick={() => void runPatch("suspended")}
+              className="px-4 py-2 text-sm font-medium text-rose-700 bg-rose-50 border border-rose-200 rounded-lg hover:bg-rose-100 flex items-center gap-2 disabled:opacity-50"
+            >
+              {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Ban className="w-4 h-4" />}
               Suspend
             </button>
-            <button className="px-4 py-2 text-sm font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg hover:bg-emerald-100 flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4" />
+            <button
+              type="button"
+              disabled={actionLoading || currentStatus === "verified"}
+              onClick={() => void runPatch("verified")}
+              className="px-4 py-2 text-sm font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg hover:bg-emerald-100 flex items-center gap-2 disabled:opacity-50"
+            >
+              {actionLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <ShieldCheck className="w-4 h-4" />
+              )}
               Verify Profile
             </button>
           </>
@@ -145,6 +199,12 @@ const SuppliersPage = () => {
       >
         {selectedSupplier && (
           <div className="space-y-8">
+            {actionError ? (
+              <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+                {actionError}
+              </div>
+            ) : null}
+
             <div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-xl">
               <div>
                 <p className="text-xs text-slate-500 font-medium">Verification State</p>
@@ -172,13 +232,20 @@ const SuppliersPage = () => {
             </section>
 
             <section>
-              <h3 className="text-sm font-semibold text-slate-900 mb-4">Identity / Documents</h3>
-              <div className="w-full h-32 bg-slate-100 border-2 border-dashed border-slate-300 rounded-xl flex items-center justify-center text-slate-400">
-                <div className="text-center">
-                  <ShieldCheck className="w-6 h-6 mx-auto mb-2 opacity-50" />
-                  <span className="text-xs font-medium">Ghana Card / Documents Placeholder</span>
+              <h3 className="text-sm font-semibold text-slate-900 mb-4">Ghana Card (on file)</h3>
+              {selectedSupplier.ghanaCardNumber ? (
+                <div className="p-4 rounded-xl border border-slate-200 bg-slate-50">
+                  <p className="text-xs text-slate-500 mb-1">Number collected during WhatsApp onboarding</p>
+                  <p className="font-mono text-sm text-slate-900">{selectedSupplier.ghanaCardNumber}</p>
                 </div>
-              </div>
+              ) : (
+                <div className="w-full min-h-[5rem] bg-slate-100 border-2 border-dashed border-slate-300 rounded-xl flex items-center justify-center text-slate-500 text-sm px-4 text-center">
+                  <div>
+                    <ShieldCheck className="w-6 h-6 mx-auto mb-2 opacity-50" />
+                    No Ghana Card number on file (skipped or not captured yet).
+                  </div>
+                </div>
+              )}
             </section>
           </div>
         )}

@@ -18,7 +18,7 @@ const Footer = () => {
     { name: "Properties", href: "#properties" },
     { name: "Features", href: "#features" },
     { name: "For Landlords", href: "#landlords" },
-    { name: "For Agents", href: "#agents" },
+    { name: "For Agents", href: "#for-agents" },
     { name: "Testimonials", href: "#testimonials" },
     { name: "How It Works", href: "#how-it-works" },
   ];
@@ -26,7 +26,12 @@ const Footer = () => {
   const supportLinks = [
     { name: "WhatsApp Support", href: "https://wa.me/+233245095569" },
     { name: "Support Email", href: "mailto:support@onukpa.com" },
-    { name: "Agent Registration", href: "#agents" },
+    {
+      name: "Agent onboarding (WhatsApp)",
+      href: `https://wa.me/233245095569?text=${encodeURIComponent(
+        "Hi Onukpa! I'm an agent and want to register and list properties."
+      )}`,
+    },
     { name: "Landlord Registration", href: "#landlords" },
     { name: "FAQ", href: "#faq" },
   ];

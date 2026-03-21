@@ -1,4 +1,10 @@
-export type PropertyCategory = "Rooms" | "Apartments" | "CampusHostels" | "OfficesStores";
+export type PropertyCategory =
+  | "Rooms"
+  | "Apartments"
+  | "CampusHostels"
+  | "OfficesStores"
+  | "StoresOffices"
+  | string;
 
 export type PropertyStatus =
   | "submitted"

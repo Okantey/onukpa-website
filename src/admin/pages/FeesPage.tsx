@@ -114,7 +114,9 @@ const FeesPage = () => {
             value: statusFilter,
             onChange: setStatusFilter,
             options: [
+              { value: "not_due", label: "Not due" },
               { value: "pending", label: "Pending" },
+              { value: "partially_paid", label: "Partially paid" },
               { value: "paid", label: "Paid" },
               { value: "disputed", label: "Disputed" },
               { value: "waived", label: "Waived" },
@@ -125,8 +127,8 @@ const FeesPage = () => {
             value: pathFilter,
             onChange: setPathFilter,
             options: [
-              { value: "landlord_direct", label: "Landlord Direct (5%)" },
-              { value: "agent_assisted", label: "Agent Assisted (3%)" },
+              { value: "landlord_direct", label: "Landlord direct" },
+              { value: "agent_fallback", label: "Agent fallback" },
             ],
           },
         ]}

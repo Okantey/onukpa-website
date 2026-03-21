@@ -10,7 +10,7 @@ const Navigation = () => {
     { name: "Features", href: "#features" },
     { name: "Properties", href: "#properties" },
     { name: "Testimonials", href: "#testimonials" },
-    { name: "For Agents", href: "#agents" },
+    { name: "For Agents", href: "#for-agents" },
   ];
 
   const handleNavClick = (href: string) => {

@@ -4,9 +4,11 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./components/UI/Home";
 import TermsAndPrivacy from "./components/Sections/TermsAndPrivacy";
 import PropertyDetail from "./components/Pages/PropertyDetail";
-import RegisterAgentPage from "./components/Pages/RegisterAgentPage";
 import RegisterLandlordPage from "./components/Pages/RegisterLandlordPage";
 import AddPropertyPage from "./components/Pages/AddPropertyPage";
+import EditSupplierPropertyPage from "./components/Pages/EditSupplierPropertyPage";
+import SupplierPortalPage from "./components/Pages/SupplierPortalPage";
+import SupplierCompletePage from "./components/Pages/SupplierCompletePage";
 import AdminLayout from "./admin/components/AdminLayout";
 import OverviewPage from "./admin/pages/OverviewPage";
 import RequestsPage from "./admin/pages/RequestsPage";
@@ -47,9 +49,14 @@ const App = () => {
         <Route path="" element={<Home />} />
         <Route path="/terms" element={<TermsAndPrivacy />} />
         <Route path="/properties/:id" element={<PropertyDetail />} />
-        <Route path="/register/agent" element={<RegisterAgentPage />} />
         <Route path="/register/landlord" element={<RegisterLandlordPage />} />
+        <Route path="/supplier/complete" element={<SupplierCompletePage />} />
+        <Route path="/supplier/portal/:token" element={<SupplierPortalPage />} />
         <Route path="/supplier/add-property/:token" element={<AddPropertyPage />} />
+        <Route
+          path="/supplier/edit-property/:token/:propertyId"
+          element={<EditSupplierPropertyPage />}
+        />
         
         <Route path="/admin" element={
           <AuthProvider>

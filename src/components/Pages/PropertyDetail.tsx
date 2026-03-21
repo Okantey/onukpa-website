@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import {
   ArrowLeft,
   BedDouble,
@@ -27,6 +27,7 @@ const formatCurrency = (value: number) =>
 
 const PropertyDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -63,7 +64,11 @@ const PropertyDetail = () => {
     setInterestSubmitting(true);
     setError(null);
     try {
-      await logPropertyInterest(id, "web");
+      const matchCandidateId = searchParams.get("m") ?? undefined;
+      await logPropertyInterest(id, {
+        source: "web",
+        matchCandidateId,
+      });
       setInterestSuccess(true);
 
       const message = `Hi Onukpa, I'm interested in this property:\n\n${property.title}\n📍 ${property.area}${

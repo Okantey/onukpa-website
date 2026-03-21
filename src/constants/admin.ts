@@ -8,6 +8,7 @@ export const REQUEST_STATUSES = [
   "pending",
   "searching",
   "property_found",
+  "no_match",
   "interested",
   "connected",
   "deal_confirmed",
@@ -31,12 +32,18 @@ export const PROPERTY_STATUSES = [
 ] as const;
 export type PropertyStatus = (typeof PROPERTY_STATUSES)[number];
 
+/** Align with `MatchCandidate` model in onukpa-bot (plus legacy UI labels where needed). */
 export const MATCH_STATUSES = [
   "generated",
+  "shown_to_renter",
   "shown",
+  "dismissed",
+  "clicked_interested",
   "interested",
   "supplier_notified",
+  "supplier_declined",
   "connected",
+  "expired",
   "viewing_scheduled",
   "negotiation",
   "confirmed",

@@ -41,7 +41,7 @@ const Hero = () => {
                   List Property
                 </a>
                 <a
-                  href="#agents"
+                  href="#for-agents"
                   className="border-2 border-slate-300 text-slate-700 px-6 py-3 rounded-lg font-semibold text-sm md:text-base hover:border-slate-400 hover:text-slate-900 transition-all duration-300 text-center"
                 >
                   Join as Agent

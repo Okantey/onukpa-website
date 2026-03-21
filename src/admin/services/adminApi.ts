@@ -1,4 +1,9 @@
-import apiClient from "./apiClient";
+import { fetchAnalytics } from "./analyticsApi";
+import { listRenterRequests } from "./requestsApi";
+import { listProperties } from "./propertiesApi";
+import { listSuppliers } from "./suppliersApi";
+import { listMatchCandidates } from "./matchesApi";
+import { listFeeRecords } from "./feesApi";
 
 export interface DashboardMetrics {
   totalRequests: number;
@@ -14,90 +19,209 @@ export interface DashboardMetrics {
   feesCollected: number;
 }
 
+export interface RecentRequestRow {
+  id: string;
+  type: string;
+  status: string;
+  date: string;
+  renterName: string;
+  phone: string;
+}
+
+function mapSummaryToMetrics(s: {
+  totalRequests: number;
+  activeRequests: number;
+  pendingReviewProperties: number;
+  activeProperties: number;
+  totalSuppliers: number;
+  totalLandlords: number;
+  totalAgents: number;
+  matchCandidatesOpen: number;
+  matchesConnected: number;
+  feesPendingCount: number;
+  totalRevenueGHS: number;
+}): DashboardMetrics {
+  return {
+    totalRequests: s.totalRequests,
+    activeRequests: s.activeRequests,
+    pendingProperties: s.pendingReviewProperties,
+    liveProperties: s.activeProperties,
+    totalSuppliers: s.totalSuppliers,
+    totalLandlords: s.totalLandlords,
+    totalAgents: s.totalAgents,
+    matchesInProgress: s.matchCandidatesOpen,
+    dealsConfirmed: s.matchesConnected,
+    feesPending: s.feesPendingCount,
+    feesCollected: s.totalRevenueGHS,
+  };
+}
+
+function mapRecentRequest(doc: Record<string, unknown>): RecentRequestRow {
+  const user = doc.userId as { name?: string; phone?: string } | undefined;
+  return {
+    id: String(doc._id ?? ""),
+    type: String(doc.requestType ?? ""),
+    status: String(doc.status ?? "pending"),
+    date: doc.createdAt ? new Date(doc.createdAt as string).toLocaleString() : "",
+    renterName: user?.name || "Unknown",
+    phone: user?.phone || "N/A",
+  };
+}
+
+export async function getDashboardPayload(): Promise<{
+  metrics: DashboardMetrics;
+  recentRequests: RecentRequestRow[];
+}> {
+  const stats = await fetchAnalytics();
+  return {
+    metrics: mapSummaryToMetrics(stats.summary),
+    recentRequests: (stats.recentActivity.latestRequests ?? []).map(mapRecentRequest),
+  };
+}
+
 export const adminApi = {
   getOverviewMetrics: async (): Promise<DashboardMetrics> => {
-    const { data } = await apiClient.get("/admin/analytics");
-    const summary = data.stats?.summary || {};
-    
-    return {
-      totalRequests: summary.totalRequests || 0,
-      activeRequests: 0, // Not explicitly tracked in simple summary yet
-      pendingProperties: Math.max(0, (summary.totalProperties || 0) - (summary.activeProperties || 0)),
-      liveProperties: summary.activeProperties || 0,
-      totalSuppliers: summary.totalSuppliers || 0,
-      totalLandlords: Math.floor((summary.totalSuppliers || 0) / 2), // Mock split
-      totalAgents: Math.ceil((summary.totalSuppliers || 0) / 2),
-      matchesInProgress: 0,
-      dealsConfirmed: summary.totalPaymentsCount || 0,
-      feesPending: 0,
-      feesCollected: summary.totalRevenueGHS || 0,
-    };
+    const stats = await fetchAnalytics();
+    return mapSummaryToMetrics(stats.summary);
   },
 
   getRequests: async () => {
-    const { data } = await apiClient.get("/admin/requests");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (data.docs || []).map((doc: any) => ({
-      ...doc,
-      id: doc._id,
-      renterName: doc.userId?.name || "Unknown Renter",
-      phone: doc.userId?.phone || "N/A",
-      type: doc.requestType,
-      budget: doc.searchCriteria?.budget ? `GH₵ ${doc.searchCriteria.budget}` : "N/A",
-      date: new Date(doc.createdAt).toLocaleDateString(),
-    }));
+    const docs = await listRenterRequests();
+    return docs.map((doc) => {
+      const d = doc as Record<string, unknown>;
+      const user = d.userId as { name?: string; phone?: string } | undefined;
+      const criteria = d.searchCriteria as { budget?: string } | undefined;
+      return {
+        ...d,
+        id: d._id,
+        renterName: user?.name || "Unknown Renter",
+        phone: user?.phone || "N/A",
+        type: d.requestType,
+        budget: criteria?.budget ? `GH₵ ${criteria.budget}` : "N/A",
+        urgency: d.urgency != null ? String(d.urgency) : "N/A",
+        date: d.createdAt ? new Date(d.createdAt as string).toLocaleDateString() : "",
+        status: d.status != null ? String(d.status) : "pending",
+      };
+    });
   },
 
   getProperties: async () => {
-    const { data } = await apiClient.get("/admin/properties");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (data.docs || []).map((doc: any) => ({
-      ...doc,
-      id: doc._id,
-      title: doc.title || "Untitled Property",
-      supplierName: "Supplier ID: " + String(doc.supplierProfileId).substring(0, 6),
-      type: doc.subType || doc.propertyCategory,
-      category: doc.propertyCategory,
-      price: `GH₵ ${doc.monthlyEquivalent || 0}`,
-      location: doc.area || "Unknown",
-      status: doc.listingStatus,
-      dateAdded: new Date(doc.createdAt).toLocaleDateString(),
-    }));
+    const docs = await listProperties();
+    return docs.map((doc) => {
+      const d = doc as Record<string, unknown>;
+      const sp = d.supplierProfileId as
+        | {
+            userId?: { name?: string };
+            companyName?: string;
+            supplierType?: string;
+          }
+        | undefined;
+      const supplierLabel =
+        sp?.userId?.name ||
+        (sp?.companyName ? String(sp.companyName) : null) ||
+        "Unknown supplier";
+      return {
+        ...d,
+        id: d._id,
+        title: d.title || "Untitled Property",
+        supplierName: supplierLabel,
+        supplierType: sp?.supplierType,
+        type: d.subType || d.propertyCategory,
+        category: d.propertyCategory,
+        price: `GH₵ ${d.monthlyEquivalent ?? 0}`,
+        location: d.area || "Unknown",
+        status: d.listingStatus,
+        dateAdded: d.createdAt
+          ? new Date(d.createdAt as string).toLocaleDateString()
+          : "",
+      };
+    });
   },
 
   getSuppliers: async () => {
-    const { data } = await apiClient.get("/admin/suppliers");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (data.docs || []).map((doc: any) => ({
-      ...doc,
-      id: doc._id,
-      name: doc.companyName || doc.userId?.name || "Unknown",
-      type: doc.supplierType,
-      phone: doc.userId?.phone || "N/A",
-      status: doc.verificationStatus,
-      propertiesListed: 0,
-      rating: doc.ratingInternal ? doc.ratingInternal.toString() : "No rating",
-      joinedDate: new Date(doc.createdAt).toLocaleDateString(),
-    }));
+    const docs = await listSuppliers();
+    return docs.map((doc) => {
+      const d = doc as Record<string, unknown>;
+      const user = d.userId as { name?: string; phone?: string } | undefined;
+      return {
+        ...d,
+        id: d._id,
+        name: (d.companyName as string) || user?.name || "Unknown",
+        type: d.supplierType,
+        phone: user?.phone || "N/A",
+        status: d.verificationStatus,
+        ghanaCardNumber: d.ghanaCardNumber != null ? String(d.ghanaCardNumber) : "",
+        propertiesListed: 0,
+        rating:
+          d.ratingInternal != null ? String(d.ratingInternal) : "No rating",
+        joinedDate: d.createdAt
+          ? new Date(d.createdAt as string).toLocaleDateString()
+          : "",
+      };
+    });
   },
 
   getMatches: async () => {
-    // Matches endpoint currently not implemented in backend adminRoutes. Provide empty list for now.
-    return [];
+    const docs = await listMatchCandidates();
+    return docs.map((doc) => {
+      const d = doc as Record<string, unknown>;
+      const rr = d.renterRequestId as
+        | { _id?: string; userId?: { name?: string } }
+        | undefined;
+      const sp = d.supplierProfileId as
+        | {
+            userId?: { name?: string };
+            companyName?: string;
+            supplierType?: string;
+          }
+        | undefined;
+      const prop = d.propertyId as { _id?: string } | undefined;
+      const renterUser = rr?.userId;
+      const supplierUser = sp?.userId;
+      return {
+        ...d,
+        id: d._id,
+        requestId: rr?._id ? `${String(rr._id).substring(0, 8)}…` : "—",
+        propertyId: prop?._id ? `${String(prop._id).substring(0, 8)}…` : "—",
+        renterName: renterUser?.name || "Unknown",
+        supplierName: sp?.companyName || supplierUser?.name || "Unknown",
+        supplierType: sp?.supplierType || "",
+        status: d.status,
+        sourcePriority: d.sourcePriority,
+        updatedAt: d.updatedAt
+          ? new Date(d.updatedAt as string).toLocaleString()
+          : "N/A",
+      };
+    });
   },
 
   getFees: async () => {
-    const { data } = await apiClient.get("/admin/fees");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (data.docs || []).map((doc: any) => ({
-      ...doc,
-      id: doc._id,
-      matchId: String(doc.connectionId).substring(0, 8) || "N/A",
-      amount: `GH₵ ${doc.onukpaFeeAmount || 0}`,
-      type: doc.feePath,
-      status: doc.paymentStatus,
-      dueDate: new Date(doc.createdAt).toLocaleDateString(),
-      renterName: "Unknown",
-    }));
+    const docs = await listFeeRecords();
+    return docs.map((doc) => {
+      const d = doc as Record<string, unknown>;
+      const conn = d.connectionId as
+        | {
+            _id?: string;
+            renterRequestId?: { userId?: { name?: string } };
+          }
+        | undefined;
+      const rr = conn?.renterRequestId;
+      const ru = rr?.userId;
+      return {
+        ...d,
+        id: d._id,
+        matchId: conn?._id ? String(conn._id).substring(0, 10) : "N/A",
+        amount: `GH₵ ${d.onukpaFeeAmount ?? 0}`,
+        type: d.feePath,
+        status: d.paymentStatus,
+        dueDate: d.createdAt
+          ? new Date(d.createdAt as string).toLocaleDateString()
+          : "",
+        renterName: ru?.name || "Unknown",
+      };
+    });
   },
 };
+
+export { fetchAnalytics } from "./analyticsApi";
+export { listAuditEvents } from "./auditApi";

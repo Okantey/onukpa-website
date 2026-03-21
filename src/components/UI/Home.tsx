@@ -1,6 +1,6 @@
 import Navigation from "../Layout/Navigation";
 import Footer from "../Layout/Footer";
-import AgentSection from "../Sections/AgentSection";
+import ForAgents from "../Sections/ForAgents";
 import Features from "../Sections/Features";
 import Hero from "../Sections/Hero";
 import HowItWorks from "../Sections/HowItWorks";
@@ -31,7 +31,7 @@ const Home = () => {
       <Stats />
       <SaveOurNumber />
       <ForLandlords />
-      <AgentSection />
+      <ForAgents />
       <AddOnServices />
       <Testimonials />
       <FAQ />

@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { MessageCircle, X, Clock } from "lucide-react";
 import favicon from "../../assets/favicon.png";
+import {
+  ONUKPA_WHATSAPP_WA_ME_ID,
+  ONUKPA_WA_RENTER_DEFAULT,
+} from "../../constants/whatsappContact";
 
 const WhatsAppFloatingButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  const phoneNumber = "+233245095569";
-  const message = "Hi Onukpa! I need help finding a place to rent";
+  const phoneNumber = `+${ONUKPA_WHATSAPP_WA_ME_ID}`;
 
   const handleWhatsAppClick = () => {
-    const encodedMessage = encodeURIComponent(message);
+    const encodedMessage = encodeURIComponent(ONUKPA_WA_RENTER_DEFAULT);
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
     window.open(whatsappUrl, "_blank");
     setIsOpen(false);
