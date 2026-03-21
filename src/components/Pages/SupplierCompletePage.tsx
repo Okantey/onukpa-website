@@ -5,10 +5,10 @@ import Navigation from "../Layout/Navigation";
 import Footer from "../Layout/Footer";
 import WhatsAppFloatingButton from "../UI/WhatsappFloatingButton";
 import { fetchMagicLinkStatus } from "../../api/suppliers";
-import { ONUKPA_WHATSAPP_WA_ME_ID } from "../../constants/whatsappContact";
-
-const COMPLETE_PREFILL =
-  "Hi Onukpa! I'm continuing my profile using the link you sent.";
+import {
+  ONUKPA_WHATSAPP_WA_ME_ID,
+  ONUKPA_WA_SUPPLIER_COMPLETE,
+} from "../../constants/whatsappContact";
 
 const SupplierCompletePage = () => {
   const [searchParams] = useSearchParams();
@@ -44,7 +44,7 @@ const SupplierCompletePage = () => {
   }, [token]);
 
   const whatsappHref = `https://wa.me/${ONUKPA_WHATSAPP_WA_ME_ID}?text=${encodeURIComponent(
-    COMPLETE_PREFILL
+    ONUKPA_WA_SUPPLIER_COMPLETE
   )}`;
 
   const isPropertyListing = tokenType === "property_listing";

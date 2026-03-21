@@ -1,77 +1,100 @@
 import {
   MessageCircle,
   Shield,
-  Bell,
   HeartHandshake,
   Send,
+  Bell,
 } from "lucide-react";
 import handleWhatsAppClick from "../../utils/openWhatsapp";
+import SectionIntro from "../Layout/SectionIntro";
+import { LANDING_IMAGES } from "../../constants/landingImages";
 
 const HowItWorks = () => {
   const steps = [
     {
       icon: MessageCircle,
-      title: "Chat on WhatsApp",
-      desc: "Say hello and tell Onukpa what you need in simple language.",
+      title: "Message us",
+      desc: "Say what you need — area, budget, move-in date.",
     },
     {
       icon: Shield,
-      title: "Get Verified Options",
-      desc: "We match you with verified rooms, apartments, hostels or offices.",
+      title: "Verified options",
+      desc: "We shortlist real listings that fit, not random links.",
     },
     {
       icon: HeartHandshake,
-      title: "Show Interest",
-      desc: 'Tap "I\'m interested" on options you like. No viewing fees.',
+      title: "Show interest",
+      desc: 'Tap “interested” on what you like. No viewing fees.',
     },
     {
       icon: Send,
-      title: "Get Connected",
-      desc: "We connect you to landlords or trusted agents directly.",
+      title: "Get connected",
+      desc: "We introduce you to the landlord or a trusted agent.",
     },
     {
       icon: Bell,
-      title: "Save & Get Alerts",
-      desc: "Save your search and receive new matches on WhatsApp.",
+      title: "Stay in the loop",
+      desc: "Save your search; we ping you when new matches land.",
     },
   ];
 
   return (
-    <section className="py-20 bg-slate-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="how-it-works">
-        <div className="text-center mb-16 animate-on-scroll">
-          <h2 className="md:text-3xl text-2xl font-bold text-slate-900 mb-4">
-            How Onukpa Works
-          </h2>
-          <p className="md:text-lg text-base text-slate-600 max-w-2xl mx-auto">
-            A calm, WhatsApp-first way to find a verified place in Accra.
-          </p>
+    <section
+      className="border-t border-stone-200/60 bg-white py-20 md:py-24"
+      id="how-it-works"
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <SectionIntro
+          eyebrow="The flow"
+          title="How Onukpa works"
+          subtitle="One conversation on WhatsApp — structured, calm, and built around how Accra actually rents."
+        />
+
+        <div className="animate-on-scroll mb-10 overflow-hidden rounded-3xl shadow-sm ring-1 ring-stone-200/80 md:mb-12">
+          <img
+            src={LANDING_IMAGES.campus}
+            alt="Students and young renters near Accra campuses"
+            className="h-44 w-full object-cover object-center md:h-52"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
 
-        <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
           {steps.map((step, index) => (
             <div
-              key={index}
-              className="animate-on-scroll group text-center p-8 rounded-2xl bg-white hover:shadow-lg transition-all duration-300 border border-slate-200"
+              key={step.title}
+              className="group relative animate-on-scroll flex flex-col rounded-2xl border border-stone-200/90 bg-surface-muted/50 p-6 transition hover:border-stone-300 hover:bg-white hover:shadow-md"
             >
-              <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-105 transition-transform duration-300">
-                <step.icon className="w-8 h-8 text-white" />
+              <span className="mb-4 font-display text-2xl font-medium text-stone-200 transition group-hover:text-primary/40">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-white shadow-sm">
+                <step.icon className="h-5 w-5" strokeWidth={2} />
               </div>
-              {/* <div className="md:text-xl text-lg font-semibold text-slate-900 mb-2">
-                {step.title}
-              </div> */}
-              <p className="text-base md:text-lg text-slate-600">{step.desc}</p>
+              <h3 className="font-semibold text-stone-900">{step.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-stone-600">
+                {step.desc}
+              </p>
             </div>
           ))}
         </div>
 
-        <div className="text-center mt-12 animate-on-scroll">
+        <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center animate-on-scroll">
           <button
+            type="button"
             onClick={() => handleWhatsAppClick()}
-            className="bg-primary text-white px-8 py-2 rounded-lg font-semibold text-base hover:bg-primary/90 transition-all duration-300 shadow-lg"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-8 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#3aa33d] sm:w-auto"
           >
+            <MessageCircle className="h-4 w-4" />
             Start on WhatsApp
           </button>
+          <a
+            href="#properties"
+            className="text-sm font-medium text-stone-600 underline decoration-stone-300 underline-offset-4 hover:text-stone-900"
+          >
+            See what you can find
+          </a>
         </div>
       </div>
     </section>

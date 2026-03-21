@@ -1,84 +1,67 @@
 import { HandCoins, Info, Wallet, ShieldCheck } from "lucide-react";
+import SectionIntro from "../Layout/SectionIntro";
 
 const PricingTransparency = () => {
   return (
-    <section className="py-20 bg-white" id="pricing">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10 animate-on-scroll">
-          <h2 className="md:text-3xl text-2xl font-bold text-slate-900 mb-4">
-            Pricing Transparency
-          </h2>
-          <p className="md:text-lg text-base text-slate-600 max-w-2xl mx-auto">
-            No viewing fees. Clear service fees only when a rental is
-            successfully completed.
+    <section
+      className="border-t border-stone-200/50 bg-white py-20 md:py-24"
+      id="pricing"
+    >
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <SectionIntro
+          eyebrow="Pricing"
+          title="Simple, success-based fees"
+          subtitle="Monthly figures help you compare. We spell out advance and total move-in cost before you commit."
+        />
+
+        <div className="grid gap-5 md:grid-cols-3">
+          <div className="animate-on-scroll rounded-2xl border border-stone-200/90 bg-surface-muted/50 p-6">
+            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <ShieldCheck className="h-5 w-5" />
+            </div>
+            <h3 className="font-semibold text-stone-900">No viewing fees</h3>
+            <p className="mt-2 text-sm leading-relaxed text-stone-600">
+              You don’t pay Onukpa to book or attend viewings.
+            </p>
+          </div>
+
+          <div className="animate-on-scroll rounded-2xl border border-stone-200/90 bg-surface-muted/50 p-6">
+            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <HandCoins className="h-5 w-5" />
+            </div>
+            <h3 className="font-semibold text-stone-900">Landlord-direct</h3>
+            <p className="mt-3 font-display text-3xl font-semibold text-primary">
+              5%
+            </p>
+            <p className="mt-1 text-sm text-stone-600">
+              Onukpa service fee on the completed rental value.
+            </p>
+          </div>
+
+          <div className="animate-on-scroll rounded-2xl border border-stone-200/90 bg-surface-muted/50 p-6">
+            <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <Wallet className="h-5 w-5" />
+            </div>
+            <h3 className="font-semibold text-stone-900">Agent-assisted</h3>
+            <p className="mt-3 font-display text-3xl font-semibold text-primary">
+              10%
+            </p>
+            <p className="mt-1 text-sm text-stone-600">
+              Total facilitation — 7% agent, 3% Onukpa.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-8 flex animate-on-scroll gap-4 rounded-2xl border border-stone-200/90 bg-surface-warm/60 p-5 md:p-6">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-stone-200/80">
+            <Info className="h-5 w-5 text-primary" />
+          </div>
+          <p className="text-sm leading-relaxed text-stone-700">
+            <span className="font-semibold text-stone-900">Why “per month”?</span>{" "}
+            It’s the easiest way to compare options. Many landlords still ask for{" "}
+            <span className="font-medium text-stone-900">1–2 years advance</span>
+            — we unpack what that means in cash terms before you decide.
           </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <div className="animate-on-scroll bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-              <ShieldCheck className="w-5 h-5 text-primary" />
-            </div>
-            <h3 className="font-semibold text-slate-900 mb-2">
-              No Viewing Fees
-            </h3>
-            <p className="text-base text-slate-600">
-              You do not pay Onukpa to book or attend property viewings. We
-              protect renters from unnecessary viewing charges.
-            </p>
-          </div>
-
-          <div className="animate-on-scroll bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-              <HandCoins className="w-5 h-5 text-primary" />
-            </div>
-            <h3 className="font-semibold text-slate-900 mb-2">
-              Landlord-direct rentals
-            </h3>
-            <p className="text-sm md:text-base text-slate-600 mb-1">
-              When you rent directly from a landlord through Onukpa:
-            </p>
-            <p className="text-sm md:text-base text-slate-800 font-semibold">
-              • 5% Onukpa service fee on the successful rental value.
-            </p>
-          </div>
-
-          <div className="animate-on-scroll bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-              <Wallet className="w-5 h-5 text-primary" />
-            </div>
-            <h3 className="font-semibold text-slate-900 mb-2">
-              Agent-assisted rentals
-            </h3>
-            <p className="text-sm md:text-base text-slate-600 mb-1">
-              When a verified agent helps complete your rental:
-            </p>
-            <p className="text-sm md:text-base text-slate-800 font-semibold">
-              • 10% total facilitation fee
-            </p>
-            <p className="text-xs text-slate-600 mt-1">
-              (7% to the agent, 3% to Onukpa)
-            </p>
-          </div>
-        </div>
-
-        <div className="animate-on-scroll flex flex-col md:flex-row items-start md:items-center gap-4 bg-slate-50 border border-slate-200 rounded-2xl px-4 md:px-6 py-4">
-          <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-            <Info className="w-5 h-5 text-primary" />
-          </div>
-          <div className="text-sm md:text-base text-slate-700">
-            <p className="mb-1">
-              Prices on Onukpa are shown as{" "}
-              <span className="font-semibold">monthly estimates</span> so you
-              can easily compare options – even though many landlords in Accra
-              still request{" "}
-              <span className="font-semibold">1–2 years advance</span>.
-            </p>
-            <p>
-              We always explain the real payment structure clearly before you
-              decide.
-            </p>
-          </div>
         </div>
       </div>
     </section>

@@ -16,29 +16,27 @@ const Footer = () => {
 
   const quickLinks = [
     { name: "Properties", href: "#properties" },
-    { name: "Features", href: "#features" },
-    { name: "For Landlords", href: "#landlords" },
-    { name: "For Agents", href: "#for-agents" },
-    { name: "Testimonials", href: "#testimonials" },
-    { name: "How It Works", href: "#how-it-works" },
+    { name: "How it works", href: "#how-it-works" },
+    { name: "Areas", href: "#areas" },
+    { name: "For landlords", href: "#landlords" },
+    { name: "For agents", href: "#for-agents" },
+    { name: "Stories", href: "#testimonials" },
   ];
 
   const supportLinks = [
-    { name: "WhatsApp Support", href: "https://wa.me/+233245095569" },
-    { name: "Support Email", href: "mailto:support@onukpa.com" },
+    { name: "WhatsApp", href: "https://wa.me/+233245095569" },
+    { name: "support@onukpa.com", href: "mailto:support@onukpa.com" },
     {
-      name: "Agent onboarding (WhatsApp)",
+      name: "Agent onboarding",
       href: `https://wa.me/233245095569?text=${encodeURIComponent(
-        "Hi Onukpa! I'm an agent and want to register and list properties."
+        "Hi Onukpa! I'm an agent and want to register and list properties.",
       )}`,
     },
-    { name: "Landlord Registration", href: "#landlords" },
     { name: "FAQ", href: "#faq" },
   ];
 
   const legalLinks = [
-    { name: "Privacy Policy", href: "/terms" },
-    { name: "Terms of Service", href: "/terms" },
+    { name: "Privacy & terms", href: "/terms" },
   ];
 
   const socialLinks = [
@@ -46,27 +44,11 @@ const Footer = () => {
       name: "WhatsApp",
       icon: MessageCircle,
       href: "https://wa.me/+233245095569",
-      color: "hover:text-green-400",
     },
-    {
-      name: "Facebook",
-      icon: Facebook,
-      href: "#",
-      color: "hover:text-blue-400",
-    },
-    {
-      name: "Instagram",
-      icon: Instagram,
-      href: "#",
-      color: "hover:text-pink-400",
-    },
-    { name: "Twitter", icon: Twitter, href: "#", color: "hover:text-blue-300" },
-    {
-      name: "LinkedIn",
-      icon: Linkedin,
-      href: "#",
-      color: "hover:text-blue-500",
-    },
+    { name: "Facebook", icon: Facebook, href: "#" },
+    { name: "Instagram", icon: Instagram, href: "#" },
+    { name: "Twitter", icon: Twitter, href: "#" },
+    { name: "LinkedIn", icon: Linkedin, href: "#" },
   ];
 
   const contactInfo = [
@@ -76,150 +58,115 @@ const Footer = () => {
       text: "support@onukpa.com",
       href: "mailto:support@onukpa.com",
     },
-    { icon: MapPin, text: "Accra, Ghana", href: "#" },
+    { icon: MapPin, text: "Accra, Ghana", href: "#areas" },
   ];
 
   return (
-    <footer className="bg-gradient-to-br from-slate-900 to-slate-800 text-white relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
-            backgroundSize: "40px 40px",
-          }}
-        ></div>
-      </div>
-
-      <div className="relative z-10">
-        {/* Main Footer Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid lg:grid-cols-2 gap-12 mb-12">
-            {/* Brand Section */}
-            <div className="space-y-6">
-              <div className="flex items-center space-x-3">
-                <img
-                  src={onukpa}
-                  alt="Onukpa"
-                  className="w-40 h-16 rounded-lg object-contain"
-                />
-              </div>
-
-              <p className="text-base text-slate-300 max-w-md leading-relaxed">
-                Ghana's fastest-growing rental platform powered by WhatsApp.
-                Connecting renters with verified agents instantly.
-              </p>
-
-              {/* Contact Information */}
-              <div className="space-y-3">
-                {contactInfo.map((item, index) => (
-                  <a
-                    key={index}
-                    href={item.href}
-                    className="flex items-center space-x-3 text-slate-300 hover:text-white transition-colors group"
-                  >
-                    <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center group-hover:bg-primary/30 transition-colors">
-                      <item.icon className="w-5 h-5 text-primary" />
-                    </div>
-                    <span className="font-medium">{item.text}</span>
-                  </a>
-                ))}
-              </div>
-
-              {/* Social Links */}
-              <div className="flex space-x-4 pt-4">
-                {socialLinks.map((social) => (
-                  <a
-                    key={social.name}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`w-12 h-12 bg-slate-700/50 rounded-xl flex items-center justify-center transition-all duration-300 ${social.color} hover:bg-slate-700/80 hover:scale-110 hover:shadow-lg`}
-                    aria-label={social.name}
-                  >
-                    <social.icon className="w-5 h-5" />
-                  </a>
-                ))}
-              </div>
+    <footer className="bg-stone-950 text-stone-300">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
+          <div className="lg:col-span-5">
+            <img
+              src={onukpa}
+              alt="Onukpa"
+              className="h-14 w-auto object-contain"
+            />
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-stone-400">
+              WhatsApp-first rentals for Accra — verified options, no viewing
+              fees, and clear success-based pricing when you close.
+            </p>
+            <div className="mt-6 space-y-3">
+              {contactInfo.map((item) => (
+                <a
+                  key={item.text}
+                  href={item.href}
+                  className="flex items-center gap-3 text-sm text-stone-300 transition hover:text-white"
+                >
+                  <item.icon className="h-4 w-4 shrink-0 text-primary" />
+                  {item.text}
+                </a>
+              ))}
             </div>
-
-            {/* Links Grid */}
-            <div className="grid sm:grid-cols-3 gap-8">
-              {/* Quick Links */}
-              <div>
-                <h3 className="font-bold text-lg mb-6 text-white relative inline-block">
-                  Quick Links
-                  <div className="absolute -bottom-2 left-0 w-8 h-0.5 bg-primary rounded-full"></div>
-                </h3>
-                <ul className="space-y-3">
-                  {quickLinks.map((link) => (
-                    <li key={link.name}>
-                      <a
-                        href={link.href}
-                        className="flex items-center space-x-2 text-slate-300 hover:text-white transition-all duration-200 group"
-                      >
-                        <ArrowRight className="w-4 h-4  transform -translate-x-2 group-hover:translate-x-0 transition-all" />
-                        <span>{link.name}</span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Support */}
-              <div>
-                <h3 className="font-bold text-lg mb-6 text-white relative inline-block">
-                  Support
-                  <div className="absolute -bottom-2 left-0 w-8 h-0.5 bg-primary rounded-full"></div>
-                </h3>
-                <ul className="space-y-3">
-                  {supportLinks.map((link) => (
-                    <li key={link.name}>
-                      <a
-                        href={link.href}
-                        className="flex items-center space-x-2 text-slate-300 hover:text-white transition-all duration-200 "
-                      >
-                        <ArrowRight className="w-4 h-4  transform -translate-x-2 group-hover:translate-x-0 transition-all" />
-                        <span>{link.name}</span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Legal */}
-              <div>
-                <h3 className="font-bold text-lg mb-6 text-white relative inline-block">
-                  Legal
-                  <div className="absolute -bottom-2 left-0 w-8 h-0.5 bg-primary rounded-full"></div>
-                </h3>
-                <ul className="space-y-3">
-                  {legalLinks.map((link) => (
-                    <li key={link.name}>
-                      <a
-                        href={link.href}
-                        className="flex items-center space-x-2 text-slate-300 hover:text-white transition-all duration-200 "
-                      >
-                        <ArrowRight className="w-4 h-4  transform -translate-x-2 group-hover:translate-x-0 transition-all" />
-                        <span>{link.name}</span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 text-stone-400 transition hover:border-white/20 hover:text-white"
+                  aria-label={social.name}
+                >
+                  <social.icon className="h-4 w-4" />
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Bottom Bar */}
-          <div className="border-t border-slate-700/50 pt-8 mt-8">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4 flex-wrap">
-              <div className="text-slate-400 text-center md:text-left">
-                <p>&copy; {currentYear} Onukpa. All rights reserved. | </p>
-              </div>
-              <span className="text-slate-400">Made with ❤️ for Ghana</span>
+          <div className="grid gap-10 sm:grid-cols-3 lg:col-span-7">
+            <div>
+              <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
+                Explore
+              </h3>
+              <ul className="mt-4 space-y-2.5">
+                {quickLinks.map((link) => (
+                  <li key={link.name}>
+                    <a
+                      href={link.href}
+                      className="group inline-flex items-center gap-1 text-sm text-stone-300 transition hover:text-white"
+                    >
+                      <ArrowRight className="h-3.5 w-3.5 opacity-0 transition group-hover:translate-x-0.5 group-hover:opacity-100" />
+                      <span className="-ml-4 group-hover:ml-0 transition-[margin]">
+                        {link.name}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
+                Support
+              </h3>
+              <ul className="mt-4 space-y-2.5">
+                {supportLinks.map((link) => (
+                  <li key={link.name}>
+                    <a
+                      href={link.href}
+                      className="group inline-flex items-center gap-1 text-sm text-stone-300 transition hover:text-white"
+                    >
+                      <ArrowRight className="h-3.5 w-3.5 opacity-0 transition group-hover:translate-x-0.5 group-hover:opacity-100" />
+                      <span className="-ml-4 group-hover:ml-0 transition-[margin]">
+                        {link.name}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
+                Legal
+              </h3>
+              <ul className="mt-4 space-y-2.5">
+                {legalLinks.map((link) => (
+                  <li key={link.name}>
+                    <a
+                      href={link.href}
+                      className="text-sm text-stone-300 transition hover:text-white"
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
+        </div>
+
+        <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-8 text-xs text-stone-500 sm:flex-row">
+          <p>© {currentYear} Onukpa. All rights reserved.</p>
+          <p>Made for renters, landlords, and agents in Ghana.</p>
         </div>
       </div>
     </footer>

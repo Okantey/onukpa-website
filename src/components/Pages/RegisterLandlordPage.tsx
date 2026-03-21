@@ -2,14 +2,14 @@ import { MessageCircle } from "lucide-react";
 import Navigation from "../Layout/Navigation";
 import Footer from "../Layout/Footer";
 import WhatsAppFloatingButton from "../UI/WhatsappFloatingButton";
-import { ONUKPA_WHATSAPP_WA_ME_ID } from "../../constants/whatsappContact";
-
-const LANDLORD_WHATSAPP_PREFILL =
-  "Hi Onukpa! I'm a landlord and want to register and list my properties.";
+import {
+  ONUKPA_WHATSAPP_WA_ME_ID,
+  ONUKPA_WA_LANDLORD_ONBOARD,
+} from "../../constants/whatsappContact";
 
 const RegisterLandlordPage = () => {
   const whatsappHref = `https://wa.me/${ONUKPA_WHATSAPP_WA_ME_ID}?text=${encodeURIComponent(
-    LANDLORD_WHATSAPP_PREFILL
+    ONUKPA_WA_LANDLORD_ONBOARD
   )}`;
 
   return (

@@ -1,75 +1,86 @@
 import { Truck, Sparkles, PaintRoller, Clock3 } from "lucide-react";
+import SectionIntro from "../Layout/SectionIntro";
+import { LANDING_IMAGES } from "../../constants/landingImages";
 
 const AddOnServices = () => {
   const services = [
     {
       icon: Truck,
-      title: "Relocation Vans",
-      status: "Available on request",
-      desc: "Move your things with vetted moving partners after you find a place.",
-      tag: "Rolling out gradually",
+      title: "Moving vans",
+      status: "On request",
+      desc: "Vetted partners when you’re ready to move.",
+      image: LANDING_IMAGES.addonMovingVan,
+      imageAlt: "Moving van for relocation",
     },
     {
       icon: Sparkles,
-      title: "Cleaning Services",
-      status: "Coming soon",
-      desc: "Book a trusted cleaning team to prepare your new room or apartment.",
-      tag: "Add-On Service",
+      title: "Deep cleaning",
+      status: "Rolling out",
+      desc: "Hand over keys to a place that feels fresh.",
+      image: LANDING_IMAGES.addonCleaning,
+      imageAlt: "Professional home cleaning",
     },
     {
       icon: PaintRoller,
-      title: "Electrician & Painter",
-      status: "Coming soon",
-      desc: "Get light fixes and simple painting handled without chasing artisans.",
-      tag: "We listened to renters",
+      title: "Electrician & painter",
+      status: "Rolling out",
+      desc: "Small fixes so you settle in faster.",
+      image: LANDING_IMAGES.addonElectricianPainter,
+      imageAlt: "Electrician working on home wiring",
     },
   ];
 
   return (
-    <section className="py-20 bg-slate-50" id="add-on-services">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-14 animate-on-scroll">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs md:text-sm font-medium mb-3">
-            Add-On Services
-          </div>
-          <h2 className="md:text-3xl text-2xl font-bold text-slate-900 mb-3">
-            We also thought about moving in
-          </h2>
-          <p className="md:text-lg text-base text-slate-600 max-w-2xl mx-auto">
-            After you find a place, Onukpa is building calm, optional services
-            to make moving in less stressful.
-          </p>
-        </div>
+    <section
+      className="border-t border-stone-200/50 bg-surface-parchment py-20 md:py-24"
+      id="add-on-services"
+    >
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <SectionIntro
+          eyebrow="After you move"
+          title="Add-on services"
+          subtitle="Optional help we’re wiring up for renters who already found a place through Onukpa — pricing shared clearly before you book."
+        />
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid gap-6 md:grid-cols-3">
           {services.map((service) => (
             <div
               key={service.title}
-              className="animate-on-scroll bg-white border border-slate-200 rounded-2xl p-6 hover:border-primary transition-all duration-300 hover:shadow-lg flex flex-col justify-between"
+              className="animate-on-scroll flex flex-col overflow-hidden rounded-2xl border border-stone-200/90 bg-surface-muted/30 shadow-sm transition hover:shadow-md"
             >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <service.icon className="w-5 h-5 text-primary" />
+              <div className="relative aspect-[16/9] overflow-hidden bg-stone-200">
+                <img
+                  src={service.image}
+                  alt={service.imageAlt}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-stone-900/35 to-transparent"
+                  aria-hidden
+                />
+              </div>
+              <div className="flex flex-1 flex-col p-6">
+                <div className="mb-4 flex items-start justify-between gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white shadow-sm">
+                    <service.icon className="h-5 w-5" />
                   </div>
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium bg-slate-50 text-slate-700 border border-slate-200">
-                    {service.tag}
+                  <span className="rounded-full border border-stone-200 bg-white px-2.5 py-1 text-[11px] font-medium text-stone-600">
+                    {service.status}
                   </span>
                 </div>
-                <h3 className="font-semibold text-slate-900 mb-1">
+                <h3 className="font-display text-lg font-semibold text-stone-900">
                   {service.title}
                 </h3>
-                <p className="text-xs uppercase tracking-wide text-slate-500 mb-2 flex items-center space-x-1">
-                  <Clock3 className="w-3 h-3" />
-                  <span>{service.status}</span>
+                <p className="mt-2 flex items-center gap-1 text-xs font-medium uppercase tracking-wide text-stone-500">
+                  <Clock3 className="h-3 w-3" />
+                  Availability varies
                 </p>
-                <p className="text-sm text-slate-600">{service.desc}</p>
+                <p className="mt-3 text-sm leading-relaxed text-stone-600">
+                  {service.desc}
+                </p>
               </div>
-              <p className="mt-4 text-xs text-slate-500">
-                These services are optional, designed to support renters after a
-                successful match. Pricing and partners will be shared clearly
-                before you decide.
-              </p>
             </div>
           ))}
         </div>

@@ -1,71 +1,102 @@
-import { MessageCircle, PhoneCall } from "lucide-react";
+import { MessageCircle, PhoneCall, Copy, Check } from "lucide-react";
+import { useState } from "react";
 import handleWhatsAppClick from "../../utils/openWhatsapp";
 
+const PHONE_DISPLAY = "+233 24 509 5569";
+const PHONE_TEL = "+233245095569";
+
 const SaveOurNumber = () => {
+  const [copied, setCopied] = useState(false);
+
+  const copyNumber = async () => {
+    try {
+      await navigator.clipboard.writeText(PHONE_TEL);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard may be unavailable */
+    }
+  };
+
   return (
-    <section className="py-20 bg-slate-900 text-white" id="save-number">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="animate-on-scroll bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/60 rounded-3xl p-8 md:p-10 shadow-xl relative overflow-hidden">
-          <div className="absolute -right-24 -bottom-24 w-72 h-72 bg-primary/20 rounded-full blur-3xl opacity-60" />
-          <div className="relative z-10">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/15 border border-primary/30 text-primary text-xs md:text-sm font-medium mb-4">
-              Stay close to the market
-            </div>
-            <h2 className="md:text-3xl text-2xl font-bold mb-4">
-              Save our WhatsApp number for daily updates
-            </h2>
-            <p className="text-slate-200 text-base md:text-lg mb-6 max-w-2xl">
-              Save Onukpa on your phone to see{" "}
-              <span className="font-semibold">
-                daily property updates on Status
-              </span>
-              , rental insights, and new verified listings – before they
-              disappear.
+    <section
+      className="relative overflow-hidden border-t border-stone-800 bg-stone-950 py-20 text-stone-100 md:py-28"
+      id="save-number"
+    >
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_70%_100%,rgba(65,179,68,0.15),transparent)]"
+        aria-hidden
+      />
+
+      <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+        <div className="animate-on-scroll inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-emerald-200/90">
+          <MessageCircle className="h-3.5 w-3.5" aria-hidden />
+          Save us like a contact you actually use
+        </div>
+
+        <h2 className="font-display mt-6 text-3xl font-semibold tracking-tight text-white md:text-4xl">
+          WhatsApp is your front door to new listings
+        </h2>
+        <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-stone-400">
+          Save Onukpa for daily Status updates, sharp pricing context, and early
+          nudges when something fits your budget — before it gets noisy in the
+          groups.
+        </p>
+
+        <div className="mx-auto mt-10 max-w-md rounded-2xl border border-white/10 bg-white/5 p-1 shadow-2xl backdrop-blur-sm">
+          <div className="rounded-xl bg-stone-900/80 px-5 py-6">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-500">
+              Onukpa on WhatsApp
             </p>
-
-            <div className="bg-slate-800/70 border border-slate-700 rounded-2xl p-4 mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-              <div>
-                <p className="text-xs uppercase tracking-wide text-slate-400 mb-1">
-                  Onukpa WhatsApp
-                </p>
-                <p className="font-semibold text-lg">+233 24 509 5569</p>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={() => handleWhatsAppClick()}
-                  className="inline-flex items-center justify-center px-5 py-2.5 rounded-lg bg-primary text-white text-sm font-semibold shadow-lg hover:bg-primary/90 transition-all"
-                >
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  Chat on WhatsApp
-                </button>
-                <a
-                  href="tel:+233245095569"
-                  className="inline-flex items-center justify-center px-5 py-2.5 rounded-lg border border-slate-600 text-slate-100 text-sm font-semibold hover:bg-slate-800 transition-all"
-                >
-                  <PhoneCall className="w-4 h-4 mr-2" />
-                  Save Our Number
-                </a>
-              </div>
+            <p className="mt-2 font-display text-2xl font-semibold tracking-tight text-white">
+              {PHONE_DISPLAY}
+            </p>
+            <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
+              <button
+                type="button"
+                onClick={() => handleWhatsAppClick()}
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#3aa33d] sm:flex-none"
+              >
+                <MessageCircle className="h-4 w-4" />
+                Open chat
+              </button>
+              <a
+                href={`tel:${PHONE_TEL}`}
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/5 sm:flex-none"
+              >
+                <PhoneCall className="h-4 w-4" />
+                Call
+              </a>
+              <button
+                type="button"
+                onClick={copyNumber}
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/5 sm:flex-none"
+              >
+                {copied ? (
+                  <Check className="h-4 w-4 text-emerald-400" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+                {copied ? "Copied" : "Copy"}
+              </button>
             </div>
-
-            <ul className="grid md:grid-cols-3 gap-4 text-sm md:text-base text-slate-200">
-              <li className="flex items-start space-x-2">
-                <span className="mt-1 w-1.5 h-1.5 rounded-full bg-primary" />
-                <span>See new rooms and apartments on Status every day.</span>
-              </li>
-              <li className="flex items-start space-x-2">
-                <span className="mt-1 w-1.5 h-1.5 rounded-full bg-primary" />
-                <span>
-                  Get early alerts when something matches your budget.
-                </span>
-              </li>
-              <li className="flex items-start space-x-2">
-                <span className="mt-1 w-1.5 h-1.5 rounded-full bg-primary" />
-                <span>Stay informed about real rental prices in Accra.</span>
-              </li>
-            </ul>
           </div>
         </div>
+
+        <ul className="mx-auto mt-10 max-w-lg space-y-3 text-left text-sm text-stone-400">
+          <li className="flex gap-3">
+            <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-primary" />
+            New rooms and apartments surface on Status first.
+          </li>
+          <li className="flex gap-3">
+            <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-primary" />
+            We’ll flag matches that actually fit what you told us.
+          </li>
+          <li className="flex gap-3">
+            <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-primary" />
+            Honest context on what “GHS X / month” means in Accra.
+          </li>
+        </ul>
       </div>
     </section>
   );

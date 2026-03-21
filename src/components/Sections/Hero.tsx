@@ -1,55 +1,98 @@
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight, MessageCircle, ShieldCheck, MapPin } from "lucide-react";
 import WhatsAppMockup from "../UI/WhatsappMockup";
 import handleWhatsAppClick from "../../utils/openWhatsapp";
 
 const Hero = () => {
   return (
-    <section className="pt-8 md:pt-16 pb-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+    <section className="relative overflow-hidden border-b border-stone-200/70 bg-surface-warm pb-16 pt-6 md:pb-24 md:pt-10">
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(65,179,68,0.1),transparent)]"
+        aria-hidden
+      />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid items-center gap-12 lg:grid-cols-[1fr_minmax(0,420px)] lg:gap-16">
           <div className="animate-on-scroll">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-6">
-              <MessageCircle className="w-4 h-4 mr-2" />
-              WhatsApp-first rentals for Accra
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-stone-200 bg-white/90 px-3 py-1.5 text-xs font-medium text-stone-600 shadow-sm backdrop-blur-sm">
+              <MessageCircle className="h-3.5 w-3.5 text-primary" aria-hidden />
+              WhatsApp-first · Built for Accra
             </div>
-            <h1
-              className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6 "
-              style={{ lineHeight: "1.2" }}
-            >
-              Find verified rooms, apartments, hostels & offices in Accra
-              <span className="text-primary"> without viewing fees</span>
+
+            <h1 className="font-display text-[2.125rem] font-semibold leading-[1.15] tracking-tight text-stone-900 sm:text-5xl lg:text-[3.25rem]">
+              Find verified rooms, apartments, hostels & offices in Accra,{" "}
+              <span className="text-primary">with no stress</span>.
             </h1>
-            <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-              Onukpa connects you to landlords, agents and hostel managers
-              directly on WhatsApp. No viewing fees, clear monthly estimates,
-              and you only pay an Onukpa service fee when a rental is
-              successfully completed.
+
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-stone-600 md:text-lg">
+              Chat with Onukpa on WhatsApp. We match you to landlords, agents,
+              and hostel managers — with clear monthly estimates and honest fee
+              rules.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+
+            <div className="mt-6 flex flex-wrap gap-3 text-sm text-stone-600">
+              <span className="inline-flex items-center gap-2 rounded-lg border border-stone-200/80 bg-white/90 px-3 py-2 shadow-sm">
+                <ShieldCheck className="h-4 w-4 shrink-0 text-primary" />
+                Verified listings
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-lg border border-stone-200/80 bg-white/90 px-3 py-2 shadow-sm">
+                <MapPin className="h-4 w-4 shrink-0 text-primary" />
+                Accra neighbourhoods you actually search
+              </span>
+            </div>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <button
+                type="button"
                 onClick={() => handleWhatsAppClick()}
-                className="group bg-primary text-white px-8 py-3 rounded-lg font-semibold text-lg hover:bg-primary/90 transition-all duration-300 flex items-center justify-center shadow-lg"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-7 py-3.5 text-base font-semibold text-white shadow-md transition hover:bg-[#3aa33d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
-                Find a Place
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <MessageCircle className="h-5 w-5" aria-hidden />
+                Find a place on WhatsApp
+                <ArrowRight className="h-4 w-4 opacity-90" aria-hidden />
               </button>
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex flex-col gap-2 sm:flex-row sm:gap-2">
                 <a
                   href="#landlords"
-                  className="border-2 border-slate-300 text-slate-700 px-6 py-3 rounded-lg font-semibold text-sm md:text-base hover:border-slate-400 hover:text-slate-900 transition-all duration-300 text-center"
+                  className="inline-flex items-center justify-center rounded-xl border border-stone-300 bg-white px-5 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-400 hover:bg-stone-50"
                 >
-                  List Property
+                  List a property
                 </a>
                 <a
                   href="#for-agents"
-                  className="border-2 border-slate-300 text-slate-700 px-6 py-3 rounded-lg font-semibold text-sm md:text-base hover:border-slate-400 hover:text-slate-900 transition-all duration-300 text-center"
+                  className="inline-flex items-center justify-center rounded-xl border border-transparent px-5 py-3 text-sm font-semibold text-stone-600 underline decoration-stone-300 underline-offset-4 hover:text-stone-900"
                 >
-                  Join as Agent
+                  Join as an agent
                 </a>
               </div>
             </div>
+
+            <p className="mt-6 text-xs text-stone-500">
+              Service fee only when a rental is completed — never to “just
+              view.”
+            </p>
           </div>
-          <WhatsAppMockup />
+
+          <div className="relative mx-auto w-full max-w-md lg:mx-0 lg:max-w-none">
+            <div
+              className="absolute right-0 top-0 z-20 hidden w-48 rounded-2xl border border-stone-200/80 bg-white p-3 shadow-lg lg:block xl:top-8"
+              aria-hidden
+            >
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-stone-400">
+                Sample match
+              </p>
+              <p className="mt-1 font-display text-lg font-semibold text-stone-900">
+                GHS 2,200
+                <span className="text-sm font-sans font-normal text-stone-500">
+                  /mo est.
+                </span>
+              </p>
+              <p className="text-xs text-stone-600">2 bed · Adjiringanor</p>
+              <p className="mt-2 text-[11px] font-medium text-primary">
+                Landlord-direct · Verified
+              </p>
+            </div>
+            <WhatsAppMockup />
+          </div>
         </div>
       </div>
     </section>

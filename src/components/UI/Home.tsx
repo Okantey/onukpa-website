@@ -1,7 +1,6 @@
 import Navigation from "../Layout/Navigation";
 import Footer from "../Layout/Footer";
 import ForAgents from "../Sections/ForAgents";
-import Features from "../Sections/Features";
 import Hero from "../Sections/Hero";
 import HowItWorks from "../Sections/HowItWorks";
 import Properties from "../Sections/Properties";
@@ -18,23 +17,24 @@ import WhatsAppFloatingButton from "./WhatsappFloatingButton";
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-stone-100 text-stone-900 antialiased">
       <WhatsAppFloatingButton />
       <Navigation />
-      <Hero />
-      <HowItWorks />
-      <WhyOnukpa />
-      <Properties />
-      <PopularAreas />
-      <Features />
-      <PricingTransparency />
-      <Stats />
-      <SaveOurNumber />
-      <ForLandlords />
-      <ForAgents />
-      <AddOnServices />
-      <Testimonials />
-      <FAQ />
+      <main>
+        <Hero />
+        <HowItWorks />
+        <Properties />
+        <WhyOnukpa />
+        <PopularAreas />
+        <AddOnServices />
+        <PricingTransparency />
+        <Stats />
+        <Testimonials />
+        <ForLandlords />
+        <ForAgents />
+        <FAQ />
+        <SaveOurNumber />
+      </main>
       <Footer />
     </div>
   );

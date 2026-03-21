@@ -3,11 +3,15 @@ import { Star, Quote, ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import { openWhatsAppPrefilled } from "../../utils/openWhatsapp";
 import {
   ONUKPA_WA_AGENT_ONBOARD,
+  ONUKPA_WA_LANDLORD_ONBOARD,
   ONUKPA_WA_RENTER_DEFAULT,
 } from "../../constants/whatsappContact";
+import SectionIntro from "../Layout/SectionIntro";
 
 const Testimonials = () => {
-  const [activeCategory, setActiveCategory] = useState("students");
+  const [activeCategory, setActiveCategory] = useState<
+    "students" | "renters" | "landlords" | "agents"
+  >("students");
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
   const testimonials = {
@@ -20,8 +24,8 @@ const Testimonials = () => {
         image: "DA",
         rating: 5,
         content:
-          "I used to waste data browsing websites that never load properly. With Onukpa, it's just WhatsApp — quick replies, low data, and I found a room in two days!",
-        stats: "Found room in 2 days",
+          "Quick replies on WhatsApp, low data, and I had a room in two days.",
+        stats: "Matched in 2 days",
       },
       {
         id: 2,
@@ -31,8 +35,8 @@ const Testimonials = () => {
         image: "EM",
         rating: 5,
         content:
-          "Most housing apps are confusing, but Onukpa keeps it simple. I just typed my budget, and boom — I got verified options instantly.",
-        stats: "Instant verified options",
+          "I typed my budget and got verified options without digging through dead links.",
+        stats: "Verified shortlist",
       },
       {
         id: 3,
@@ -42,30 +46,8 @@ const Testimonials = () => {
         image: "KA",
         rating: 5,
         content:
-          "Compared to other rental apps, Onukpa is faster and lighter. No need to download anything — just chat on WhatsApp and you're good.",
-        stats: "No app download needed",
-      },
-      {
-        id: 4,
-        name: "Isaax",
-        role: "Student",
-        location: "Accra",
-        image: "IS",
-        rating: 5,
-        content:
-          "Onukpa made finding a student room simple. It works on low data and gives you only real, available listings.",
-        stats: "Works on low data",
-      },
-      {
-        id: 5,
-        name: "Joel",
-        role: "Student",
-        location: "Accra",
-        image: "JO",
-        rating: 5,
-        content:
-          "No app download, no stress. Just WhatsApp, my budget, and my location — I got a call from an agent within hours!",
-        stats: "Agent contact in hours",
+          "No extra app — just WhatsApp. Felt lighter than the usual property sites.",
+        stats: "WhatsApp-only flow",
       },
     ],
     renters: [
@@ -77,8 +59,8 @@ const Testimonials = () => {
         image: "KO",
         rating: 5,
         content:
-          "Honestly, I was shocked how smooth it was. Other websites lag, but this chatbot feels human and efficient. I got my place near East Legon in no time.",
-        stats: "Smooth & efficient",
+          "Replies felt human. I was near East Legon faster than I expected.",
+        stats: "East Legon move",
       },
       {
         id: 7,
@@ -88,8 +70,8 @@ const Testimonials = () => {
         image: "JO",
         rating: 5,
         content:
-          "I didn't even expect much, but Onukpa replied immediately and connected me to a real agent. The process was way faster than those big property apps.",
-        stats: "Immediate replies",
+          "They connected me to a real agent the same day — no long forms.",
+        stats: "Same-day intro",
       },
       {
         id: 8,
@@ -99,377 +81,260 @@ const Testimonials = () => {
         image: "DE",
         rating: 5,
         content:
-          "I've tried a few apps before, but Onukpa stands out. No long forms or slow pages — just WhatsApp, and it works perfectly.",
-        stats: "No long forms",
+          "Works when the network is patchy. That matters more than people admit.",
+        stats: "Low-bandwidth friendly",
       },
+    ],
+    landlords: [
       {
-        id: 9,
-        name: "Angel",
-        role: "Renter",
-        location: "Accra",
-        image: "AN",
+        id: 20,
+        name: "Ama Serwaa",
+        role: "Landlord",
+        location: "Ashaley Botwe, Accra",
+        image: "AS",
         rating: 5,
         content:
-          "I was surprised how personal it felt. It's not like a stiff website form — the chatbot actually understands what you're looking for.",
-        stats: "Personalized service",
+          "Renters message with budget and area already clear — I waste less time on people who were never serious.",
+        stats: "Fewer wasted viewings",
       },
       {
-        id: 10,
-        name: "Meri",
-        role: "Renter",
-        location: "Accra",
-        image: "ME",
+        id: 21,
+        name: "Kwame Osei",
+        role: "Hostel manager",
+        location: "Legon, Accra",
+        image: "KS",
         rating: 5,
         content:
-          "The best part? It works even with poor internet. I found my room faster than any of my friends using regular housing apps.",
-        stats: "Works with poor internet",
+          "Listing through the portal is straightforward, and Onukpa flags enquiries before they flood my phone.",
+        stats: "Cleaner enquiries",
+      },
+      {
+        id: 22,
+        name: "Efua Mensah",
+        role: "Landlord",
+        location: "Weija, Accra",
+        image: "EM",
+        rating: 5,
+        content:
+          "I like that fees are explained upfront and I’m not chasing people across five WhatsApp groups.",
+        stats: "Transparent fees",
       },
     ],
     agents: [
       {
         id: 11,
         name: "Patrick",
-        role: "Real Estate Agent",
+        role: "Agent",
         location: "Madina, Accra",
         image: "PA",
         rating: 5,
         content:
-          "Before Onukpa, it was hard to reach serious clients. Now I get verified leads daily right on WhatsApp — no need for extra ads.",
-        stats: "Daily verified leads",
+          "Leads arrive with budget and area already captured — less back-and-forth.",
+        stats: "Structured leads",
       },
       {
         id: 12,
         name: "Akua",
-        role: "Real Estate Agent",
+        role: "Agent",
         location: "East Legon, Accra",
         image: "AK",
         rating: 5,
         content:
-          "It's one of the easiest platforms I've used. Clients message directly with details already collected — saves me so much time!",
-        stats: "Time-saving platform",
+          "Clients show up knowing what they want. Saves hours every week.",
+        stats: "Less noise",
       },
       {
         id: 13,
         name: "Richmond",
-        role: "Real Estate Agent",
+        role: "Agent",
         location: "Tema",
         image: "RI",
         rating: 5,
         content:
-          "I've closed more deals with Onukpa in a month than on other property apps in three. The system filters real buyers from the noise.",
-        stats: "More deals closed",
-      },
-      {
-        id: 14,
-        name: "Nana Adjei",
-        role: "Real Estate Agent",
-        location: "Spintex, Accra",
-        image: "NA",
-        rating: 5,
-        content:
-          "What I love most is how fast it connects me to clients. It's all WhatsApp — no app installs, no lag, just straight business.",
-        stats: "Fast client connections",
-      },
-      {
-        id: 15,
-        name: "Lunartech Solutions",
-        role: "Company",
-        location: "Accra",
-        image: "LS",
-        rating: 5,
-        content:
-          "We secured our new office through Onukpa. The platform is reliable, quick, and way easier than browsing endless websites.",
-        stats: "Office secured easily",
+          "The bot filters people who are serious before they reach me.",
+        stats: "Better qualification",
       },
     ],
   };
 
-  const currentTestimonials =
-    testimonials[activeCategory as keyof typeof testimonials];
+  const currentList = testimonials[activeCategory];
 
   const nextTestimonial = () => {
     setActiveTestimonial((prev) =>
-      prev === currentTestimonials.length - 1 ? 0 : prev + 1,
+      prev === currentList.length - 1 ? 0 : prev + 1,
     );
   };
 
   const prevTestimonial = () => {
     setActiveTestimonial((prev) =>
-      prev === 0 ? currentTestimonials.length - 1 : prev - 1,
+      prev === 0 ? currentList.length - 1 : prev - 1,
     );
   };
 
-  const goToTestimonial = (index: number) => {
-    setActiveTestimonial(index);
-  };
-
-  const handleCategoryChange = (category: string) => {
+  const handleCategoryChange = (category: typeof activeCategory) => {
     setActiveCategory(category);
     setActiveTestimonial(0);
   };
 
+  const current = currentList[activeTestimonial];
+
   return (
     <section
       id="testimonials"
-      className="py-12 md:py-20 bg-gradient-to-br from-slate-50 to-blue-50/30"
+      className="border-t border-stone-200/50 bg-surface-warm py-20 md:py-24"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-8 md:mb-12 animate-on-scroll">
-          <div className="inline-flex items-center px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs md:text-sm font-medium mb-3 md:mb-4">
-            <Star className="w-3 h-3 md:w-4 md:h-4 mr-1.5 md:mr-2 fill-current" />
-            Loved by Students, Renters & Agents
-          </div>
-          <h2 className="text-2xl md:text-4xl font-bold text-slate-900 mb-3 md:mb-4 px-4">
-            What People Are Saying
-          </h2>
-          <p className="text-sm md:text-lg text-slate-600 max-w-2xl mx-auto px-4">
-            Discover why thousands trust Onukpa for their rental needs in Ghana
-          </p>
-        </div>
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <SectionIntro
+          eyebrow="Voices from Accra"
+          title="People who already moved with Onukpa"
+          subtitle="Real WhatsApp-first stories — edited lightly for length."
+        />
 
-        {/* Category Tabs - Mobile Optimized */}
-        <div className="flex justify-center mb-8 md:mb-12 animate-on-scroll px-2">
-          <div className="inline-flex bg-white rounded-xl md:rounded-2xl p-1 md:p-2 border border-slate-200 shadow-sm w-full max-w-md">
-            {[
-              {
-                id: "students",
-                label: "Students",
-                icon: "🎓",
-                count: testimonials.students.length,
-              },
-              {
-                id: "renters",
-                label: "Renters",
-                icon: "🏠",
-                count: testimonials.renters.length,
-              },
-              {
-                id: "agents",
-                label: "Agents",
-                icon: "💼",
-                count: testimonials.agents.length,
-              },
-            ].map((category) => (
+        <div className="mb-8 flex justify-center animate-on-scroll">
+          <div className="flex max-w-full flex-wrap justify-center gap-1 rounded-xl border border-stone-200 bg-white p-1 shadow-sm sm:inline-flex sm:flex-nowrap">
+            {(
+              [
+                { id: "students" as const, label: "Students" },
+                { id: "renters" as const, label: "Renters" },
+                { id: "landlords" as const, label: "Landlords" },
+                { id: "agents" as const, label: "Agents" },
+              ] as const
+            ).map((tab) => (
               <button
-                key={category.id}
-                onClick={() => handleCategoryChange(category.id)}
-                className={`flex flex-col items-center space-y-1 px-2 py-2 md:px-4 md:py-3 rounded-lg md:rounded-xl font-medium transition-all duration-300 flex-1 min-w-0 ${
-                  activeCategory === category.id
-                    ? "bg-primary text-white shadow-md"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                key={tab.id}
+                type="button"
+                onClick={() => handleCategoryChange(tab.id)}
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
+                  activeCategory === tab.id
+                    ? "bg-stone-900 text-white"
+                    : "text-stone-600 hover:text-stone-900"
                 }`}
               >
-                <span className="text-base md:text-lg">{category.icon}</span>
-                <span className="text-xs md:text-sm font-medium whitespace-nowrap">
-                  {category.label}
-                </span>
-                <span
-                  className={`text-xs px-1.5 py-0.5 rounded-full ${
-                    activeCategory === category.id
-                      ? "bg-white/20 text-white"
-                      : "bg-slate-200 text-slate-600"
-                  }`}
-                >
-                  {category.count}
-                </span>
+                {tab.label}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Main Testimonial Carousel - Mobile Optimized */}
-        <div className="max-w-4xl mx-auto mb-8 md:mb-12 px-2">
-          <div className="relative bg-white rounded-2xl md:rounded-3xl shadow-lg md:shadow-xl border border-slate-200 p-4 md:p-8 lg:p-12 animate-on-scroll">
-            {/* Quote Icon - Mobile Adjusted */}
-            <div className="absolute -top-3 -left-3 md:-top-4 md:-left-4 w-8 h-8 md:w-12 md:h-12 bg-primary rounded-xl md:rounded-2xl flex items-center justify-center shadow-md md:shadow-lg">
-              <Quote className="w-4 h-4 md:w-6 md:h-6 text-white" />
+        <div className="relative animate-on-scroll">
+          <article className="rounded-2xl border border-stone-200/90 bg-white px-6 py-10 shadow-sm md:px-12 md:py-12">
+            <div className="absolute -left-1 -top-1 flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-white shadow-md md:left-4 md:top-4">
+              <Quote className="h-5 w-5" />
             </div>
 
-            {/* Content */}
-            <div className="text-center mb-6 md:mb-8 pt-2">
-              <div className="flex justify-center mb-4 md:mb-6">
-                {[...Array(currentTestimonials[activeTestimonial].rating)].map(
-                  (_, i) => (
-                    <Star
-                      key={i}
-                      className="w-4 h-4 md:w-6 md:h-6 text-yellow-400 fill-current"
-                    />
-                  ),
-                )}
-              </div>
-
-              <blockquote className="text-sm md:text-lg lg:text-xl font-medium text-slate-900 leading-relaxed mb-4 md:mb-6 px-2">
-                "{currentTestimonials[activeTestimonial].content}"
-              </blockquote>
-
-              <div className="inline-flex items-center px-3 py-1.5 md:px-4 md:py-2 bg-primary/10 rounded-full">
-                <div className="text-xs md:text-sm font-semibold text-primary">
-                  {currentTestimonials[activeTestimonial].stats}
-                </div>
-              </div>
+            <div className="flex justify-center gap-0.5 pt-4">
+              {Array.from({ length: current.rating }).map((_, i) => (
+                <Star
+                  key={i}
+                  className="h-4 w-4 fill-amber-400 text-amber-400"
+                />
+              ))}
             </div>
 
-            {/* Author */}
-            <div className="text-center">
-              <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-primary to-primary/80 rounded-xl md:rounded-2xl flex items-center justify-center text-white font-bold text-lg md:text-xl mx-auto mb-3 md:mb-4 shadow-md md:shadow-lg">
-                {currentTestimonials[activeTestimonial].image}
+            <blockquote className="mx-auto mt-6 max-w-2xl text-center font-display text-xl font-medium leading-snug text-stone-900 md:text-2xl">
+              “{current.content}”
+            </blockquote>
+
+            <p className="mt-4 text-center text-sm font-medium text-primary">
+              {current.stats}
+            </p>
+
+            <div className="mt-8 flex flex-col items-center gap-1 border-t border-stone-100 pt-8">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-stone-900 text-base font-semibold text-white">
+                {current.image}
               </div>
-              <div className="mb-2">
-                <h4 className="text-lg md:text-xl font-bold text-slate-900">
-                  {currentTestimonials[activeTestimonial].name}
-                </h4>
-                <p className="text-primary font-semibold text-sm md:text-base">
-                  {currentTestimonials[activeTestimonial].role}
-                </p>
-              </div>
-              <div className="flex items-center justify-center text-slate-600 text-xs md:text-sm">
-                <MapPin className="w-3 h-3 md:w-4 md:h-4 mr-1" />
-                {currentTestimonials[activeTestimonial].location}
-              </div>
+              <p className="mt-3 font-semibold text-stone-900">{current.name}</p>
+              <p className="text-sm text-stone-500">{current.role}</p>
+              <p className="mt-1 flex items-center gap-1 text-xs text-stone-500">
+                <MapPin className="h-3 w-3" />
+                {current.location}
+              </p>
             </div>
 
-            {/* Navigation Arrows - Mobile Optimized */}
             <button
+              type="button"
               onClick={prevTestimonial}
-              className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 w-8 h-8 md:w-12 md:h-12 bg-white border border-slate-200 rounded-full flex items-center justify-center hover:bg-slate-50 transition-all duration-200 shadow-md md:shadow-lg hover:shadow-xl"
+              className="absolute left-0 top-1/2 hidden -translate-y-1/2 rounded-full border border-stone-200 bg-white p-2.5 text-stone-700 shadow-sm transition hover:bg-stone-50 md:flex"
+              aria-label="Previous testimonial"
             >
-              <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 text-slate-700" />
+              <ChevronLeft className="h-5 w-5" />
             </button>
             <button
+              type="button"
               onClick={nextTestimonial}
-              className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 w-8 h-8 md:w-12 md:h-12 bg-white border border-slate-200 rounded-full flex items-center justify-center hover:bg-slate-50 transition-all duration-200 shadow-md md:shadow-lg hover:shadow-xl"
+              className="absolute right-0 top-1/2 hidden -translate-y-1/2 rounded-full border border-stone-200 bg-white p-2.5 text-stone-700 shadow-sm transition hover:bg-stone-50 md:flex"
+              aria-label="Next testimonial"
             >
-              <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-slate-700" />
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </article>
+
+          <div className="mt-6 flex justify-center gap-2 md:hidden">
+            <button
+              type="button"
+              onClick={prevTestimonial}
+              className="rounded-full border border-stone-200 bg-white p-2 shadow-sm"
+              aria-label="Previous"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              type="button"
+              onClick={nextTestimonial}
+              className="rounded-full border border-stone-200 bg-white p-2 shadow-sm"
+              aria-label="Next"
+            >
+              <ChevronRight className="h-5 w-5" />
             </button>
           </div>
 
-          {/* Dots Indicator */}
-          <div className="flex justify-center space-x-2 md:space-x-3 mt-6 md:mt-8">
-            {currentTestimonials.map((_, index) => (
+          <div className="mt-6 flex justify-center gap-2">
+            {currentList.map((_, index) => (
               <button
                 key={index}
-                onClick={() => goToTestimonial(index)}
-                className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 ${
+                type="button"
+                onClick={() => setActiveTestimonial(index)}
+                className={`h-2 rounded-full transition-all ${
                   index === activeTestimonial
-                    ? "bg-primary w-6 md:w-8"
-                    : "bg-slate-300 hover:bg-slate-400"
+                    ? "w-8 bg-primary"
+                    : "w-2 bg-stone-300 hover:bg-stone-400"
                 }`}
+                aria-label={`Go to testimonial ${index + 1}`}
               />
             ))}
           </div>
         </div>
 
-        {/* Stats Bar - Mobile Optimized */}
-        <div className="grid grid-cols-2 gap-3 md:gap-6 max-w-3xl mx-auto mb-12 md:mb-16 animate-on-scroll px-2">
-          {[
-            { number: "2k+", label: "Happy Users" },
-            { number: "2k+", label: "WhatsApp Contacts" },
-            { number: "95%", label: "Success Rate" },
-            { number: "4.8/5", label: "Satisfaction" },
-          ].map((stat, index) => (
-            <div
-              key={index}
-              className="text-center p-4 md:p-6 bg-white rounded-xl md:rounded-2xl border border-slate-200 hover:shadow-md md:hover:shadow-lg transition-all duration-300"
+        <div className="mt-14 rounded-2xl border border-stone-200 bg-white px-6 py-8 text-center shadow-sm animate-on-scroll md:px-10">
+          <h3 className="font-display text-xl font-semibold text-stone-900 md:text-2xl">
+            Ready when you are
+          </h3>
+          <p className="mx-auto mt-2 max-w-md text-sm text-stone-600">
+            Renters, landlords, and agents all start from WhatsApp — same bot,
+            clear next steps.
+          </p>
+          <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
+            <button
+              type="button"
+              onClick={() => openWhatsAppPrefilled(ONUKPA_WA_RENTER_DEFAULT)}
+              className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#3aa33d]"
             >
-              <div className="text-xl md:text-3xl font-bold text-primary mb-1 md:mb-2">
-                {stat.number}
-              </div>
-              <div className="text-xs md:text-sm text-slate-600 font-medium">
-                {stat.label}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Category Highlights - Mobile Optimized */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 mb-12 md:mb-16 px-2">
-          {[
-            {
-              category: "students",
-              title: "For Students",
-              description: "Find affordable rooms and hostels near your campus",
-              icon: "🎓",
-              features: [
-                "Low data usage",
-                "Quick responses",
-                "Campus locations",
-              ],
-            },
-            {
-              category: "renters",
-              title: "For Renters",
-              description: "Discover your perfect home without the hassle",
-              icon: "🏠",
-              features: [
-                "Verified listings",
-                "Budget matching",
-                "Fast process",
-              ],
-            },
-            {
-              category: "agents",
-              title: "For Agents",
-              description: "Grow your business with qualified leads",
-              icon: "💼",
-              features: ["Daily leads", "WhatsApp integration", "No extra ads"],
-            },
-          ].map((section, index) => (
-            <div
-              key={section.category}
-              className="bg-white rounded-xl md:rounded-2xl p-4 md:p-6 border border-slate-200 hover:shadow-md md:hover:shadow-lg transition-all duration-300 animate-on-scroll"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              Find a place
+            </button>
+            <button
+              type="button"
+              onClick={() => openWhatsAppPrefilled(ONUKPA_WA_LANDLORD_ONBOARD)}
+              className="inline-flex items-center justify-center rounded-xl border border-stone-300 bg-white px-6 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-400"
             >
-              <div className="text-3xl md:text-4xl mb-3 md:mb-4">
-                {section.icon}
-              </div>
-              <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-2">
-                {section.title}
-              </h3>
-              <p className="text-slate-600 text-sm md:text-base mb-3 md:mb-4">
-                {section.description}
-              </p>
-              <ul className="space-y-1.5 md:space-y-2">
-                {section.features.map((feature, featureIndex) => (
-                  <li
-                    key={featureIndex}
-                    className="flex items-center text-xs md:text-sm text-slate-700"
-                  >
-                    <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-primary rounded-full mr-2 md:mr-3"></div>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        {/* CTA - Mobile Optimized */}
-        <div className="text-center animate-on-scroll px-2">
-          <div className="bg-primary rounded-xl md:rounded-2xl p-6 md:p-8 lg:p-12 text-white">
-            <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-3 md:mb-4">
-              Ready to Experience the Difference?
-            </h3>
-            <p className="text-primary-100 mb-4 md:mb-6 max-w-2xl mx-auto text-sm md:text-lg">
-              Join thousands of satisfied users who found their perfect space
-              through Onukpa
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
-              <button
-                type="button"
-                onClick={() => openWhatsAppPrefilled(ONUKPA_WA_RENTER_DEFAULT)}
-                className="bg-white text-primary px-6 md:px-8 py-2.5 md:py-3 rounded-lg md:rounded-xl font-semibold hover:bg-slate-100 transition-all duration-300 shadow-lg hover:scale-105 text-sm md:text-base"
-              >
-                Find a Place Now
-              </button>
-              <button
-                type="button"
-                onClick={() => openWhatsAppPrefilled(ONUKPA_WA_AGENT_ONBOARD)}
-                className="bg-transparent border border-white md:border-2 text-white px-6 md:px-8 py-2.5 md:py-3 rounded-lg md:rounded-xl font-semibold hover:bg-white/10 transition-all duration-300 hover:scale-105 text-sm md:text-base"
-              >
-                I&apos;m an agent — WhatsApp
-              </button>
-            </div>
+              I&apos;m a landlord
+            </button>
+            <button
+              type="button"
+              onClick={() => openWhatsAppPrefilled(ONUKPA_WA_AGENT_ONBOARD)}
+              className="inline-flex items-center justify-center rounded-xl border border-stone-300 bg-white px-6 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-400"
+            >
+              I&apos;m an agent
+            </button>
           </div>
         </div>
       </div>

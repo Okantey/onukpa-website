@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import SectionIntro from "../Layout/SectionIntro";
 
 type FAQItem = {
   question: string;
@@ -10,37 +11,37 @@ const faqs: FAQItem[] = [
   {
     question: "Do I pay to search for a place on Onukpa?",
     answer:
-      "No. You do not pay Onukpa to search or to share your requirements. Our service fee only applies when a rental is successfully completed through Onukpa.",
+      "No. Searching and sharing your requirements is free. Our service fee applies only when a rental is successfully completed through Onukpa.",
   },
   {
     question: "Does Onukpa charge viewing fees?",
     answer:
-      "No. Onukpa does not charge viewing fees. We actively avoid viewing-fee behaviour and work with landlords and agents who respect renters.",
+      "No. We don’t charge viewing fees and we work with landlords and agents who respect renters on this point.",
   },
   {
     question: "Why are prices shown monthly?",
     answer:
-      "We show prices as monthly estimates so you can easily compare options. Many landlords in Accra still take 1–2 years advance, but we always explain the real payment structure clearly before you decide.",
+      "Monthly estimates make it easy to compare options. Many Accra landlords still ask for 1–2 years advance — we explain the full cash picture before you commit.",
   },
   {
     question: "How does agent routing work?",
     answer:
-      "Onukpa first looks for direct landlord matches. When it helps you find a place faster, we also route your request to verified agents in your selected areas. You only get connected to agents who have relevant properties.",
+      "We start with landlord-direct matches. When it helps you move faster, we also route to verified agents with relevant stock in your areas.",
   },
   {
     question: "How do landlords list on Onukpa?",
     answer:
-      "Landlords can register via WhatsApp or the web, then receive a secure link to add properties one by one. Each property is reviewed by the Onukpa team before going live.",
+      "Register via WhatsApp or the web, then use your secure link to add properties one at a time. Each listing is reviewed before it goes live.",
   },
   {
     question: "How do agents join Onukpa?",
     answer:
-      "Agents can apply via the agent registration form. We review your details, areas of operation and portfolio before approving you to receive verified renter leads.",
+      "Message the Onukpa bot on WhatsApp, choose the agent path, and complete onboarding in chat. You’ll receive a secure link to submit listings when you’re approved.",
   },
   {
     question: "How does Onukpa make money?",
     answer:
-      "Onukpa earns a small success-based fee on completed rentals – 5% on landlord-direct deals, and 10% total on agent-assisted rentals (7% to the agent, 3% to Onukpa). There are no viewing fees.",
+      "Success-based fees on completed rentals: 5% on landlord-direct deals, and 10% total on agent-assisted rentals (7% agent, 3% Onukpa). No viewing fees.",
   },
 ];
 
@@ -48,43 +49,41 @@ const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-20 bg-white" id="faq">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10 animate-on-scroll">
-          <h2 className="md:text-3xl text-2xl font-bold text-slate-900 mb-3">
-            Frequently Asked Questions
-          </h2>
-          <p className="md:text-lg text-base text-slate-600">
-            Practical answers to the questions renters, landlords and agents ask
-            most.
-          </p>
-        </div>
+    <section
+      className="border-t border-stone-200/50 bg-surface-muted py-20 md:py-24"
+      id="faq"
+    >
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <SectionIntro
+          title="Frequently asked"
+          subtitle="Straight answers — the same ones we give in chat."
+        />
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           {faqs.map((item, index) => {
             const isOpen = openIndex === index;
             return (
               <div
                 key={item.question}
-                className="animate-on-scroll border border-slate-200 rounded-2xl bg-white shadow-sm"
+                className="animate-on-scroll overflow-hidden rounded-2xl border border-stone-200/90 bg-surface-muted/30"
               >
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full flex items-center justify-between px-4 md:px-6 py-4 text-left"
+                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left md:px-6 md:py-5"
                 >
-                  <span className="text-base md:text-lg font-semibold text-slate-900 pr-4">
+                  <span className="font-medium text-stone-900">
                     {item.question}
                   </span>
                   <ChevronDown
-                    className={`w-5 h-5 text-slate-500 transition-transform ${
+                    className={`h-5 w-5 shrink-0 text-stone-500 transition-transform ${
                       isOpen ? "rotate-180" : ""
                     }`}
                   />
                 </button>
                 {isOpen && (
-                  <div className="px-4 md:px-6 pb-4 text-base md:text-lg text-slate-700">
-                    {item.answer}
+                  <div className="border-t border-stone-200/80 px-5 pb-5 pt-0 text-sm leading-relaxed text-stone-600 md:px-6 md:pb-6">
+                    <p className="pt-4">{item.answer}</p>
                   </div>
                 )}
               </div>

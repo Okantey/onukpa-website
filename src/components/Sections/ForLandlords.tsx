@@ -5,96 +5,97 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import handleWhatsAppClick from "../../utils/openWhatsapp";
+import { LANDING_IMAGES } from "../../constants/landingImages";
 
 const ForLandlords = () => {
   const points = [
-    "Register as a landlord and add your properties one by one.",
-    "Reach serious renters who have already shared their budget and area.",
-    "Get support from the Onukpa team when pricing or structuring your offer.",
-    "Pay only when successful, based on our clear service fee rules.",
+    "Register and add properties one secure link at a time.",
+    "Serious renters arrive with budget and area already captured.",
+    "We help you think through pricing and how you collect rent.",
+    "You pay on success — same published fee rules as everyone else.",
   ];
 
   return (
-    <section className="py-20 bg-white" id="landlords">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-10 items-center">
+    <section
+      className="border-t border-stone-200/50 bg-surface-sage py-20 md:py-24"
+      id="landlords"
+    >
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="animate-on-scroll">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs md:text-sm font-medium mb-4">
-              For landlords in Accra
-            </div>
-            <h2 className="md:text-3xl text-2xl font-bold text-slate-900 mb-4">
-              A calmer way to fill your rooms and apartments
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary mb-3">
+              Landlords
+            </p>
+            <h2 className="font-display text-3xl md:text-4xl font-semibold tracking-tight text-stone-900">
+              Fill rooms without the chaos
             </h2>
-            <p className="text-slate-600 text-sm md:text-base mb-5">
-              Onukpa helps landlords find serious renters without chaos. We
-              bring structured requests, verified profiles and WhatsApp-first
-              support – so you can focus on running your property well.
+            <p className="mt-4 max-w-lg text-base leading-relaxed text-stone-600">
+              Onukpa brings structured WhatsApp enquiries from people who are
+              ready to move — not endless tyre-kickers.
             </p>
 
-            <ul className="space-y-3 mb-6">
+            <ul className="mt-8 space-y-3">
               {points.map((text) => (
-                <li key={text} className="flex items-start space-x-3">
-                  <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                  <span className="text-sm md:text-base text-slate-700">
-                    {text}
-                  </span>
+                <li key={text} className="flex gap-3 text-sm text-stone-700">
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                  {text}
                 </li>
               ))}
             </ul>
 
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <a
                 href="/register/landlord"
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-primary text-white text-sm font-semibold shadow-lg hover:bg-primary/90 transition-all"
+                className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#3aa33d]"
               >
-                List Your Property
+                List your property
               </a>
               <button
                 type="button"
                 onClick={() => handleWhatsAppClick()}
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-slate-300 text-slate-800 text-sm font-semibold hover:border-slate-400 hover:text-slate-900 transition-all"
+                className="inline-flex items-center justify-center rounded-xl border border-stone-300 bg-white px-6 py-3 text-sm font-semibold text-stone-800 transition hover:border-stone-400"
               >
-                <MessageCircle className="w-4 h-4 mr-2" />
-                Talk to the team
+                <MessageCircle className="mr-2 h-4 w-4" />
+                Speak to the team
               </button>
             </div>
           </div>
 
           <div className="animate-on-scroll">
-            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm">
-              <div className="flex items-center mb-4 space-x-3">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Building2 className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-slate-500">
-                    For Landlords
-                  </p>
-                  <p className="font-semibold text-slate-900 text-sm">
-                    Rooms • Apartments • Hostels • Stores
-                  </p>
-                </div>
+            <div className="overflow-hidden rounded-2xl border border-stone-200/90 bg-white shadow-md">
+              <div className="relative aspect-[4/3] overflow-hidden bg-stone-200">
+                <img
+                  src={LANDING_IMAGES.keysHome}
+                  alt="Keys to a new home in Accra"
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
-
-              <div className="space-y-3 text-sm text-slate-700">
-                <p>
-                  Share your property details once via a secure link. Our team
-                  reviews every listing before it goes live, to protect both you
-                  and renters.
+              <div className="space-y-4 p-6 md:p-8">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                    <Building2 className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+                      What we list
+                    </p>
+                    <p className="font-medium text-stone-900">
+                      Rooms · Apartments · Hostels · Commercial
+                    </p>
+                  </div>
+                </div>
+                <p className="text-sm leading-relaxed text-stone-600">
+                  Every submission is reviewed before it goes live. We verify
+                  suppliers and high-value deals with Ghana Card checks where it
+                  matters.
                 </p>
-                <p>
-                  We prioritise direct landlords in matching, then trusted
-                  agents as a fallback for harder searches. Your listing
-                  benefits from both flows.
-                </p>
-              </div>
-
-              <div className="mt-5 flex items-center space-x-3 text-xs text-slate-600">
-                <ShieldCheck className="w-4 h-4 text-primary" />
-                <p>
-                  Supplier profiles and properties may be verified with Ghana
-                  Card and manual checks before large deals.
-                </p>
+                <div className="flex gap-2 rounded-xl bg-stone-50 p-3 text-xs text-stone-600">
+                  <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  Your listing can surface in both landlord-first matching and
+                  trusted-agent fallback.
+                </div>
               </div>
             </div>
           </div>

@@ -5,7 +5,11 @@
 @tailwind utilities;
 
 * {
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: "Fraunces", Georgia, serif;
 }
 
 @keyframes float {

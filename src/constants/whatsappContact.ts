@@ -8,3 +8,11 @@ export const ONUKPA_WA_RENTER_DEFAULT =
 /** Prefill for agents starting onboarding on the bot (no web registration). */
 export const ONUKPA_WA_AGENT_ONBOARD =
   "Hi Onukpa! I'm an agent and want to register and list properties.";
+
+/** Prefill from landlord registration page — keep in sync with `onukpa-bot/constants/webWhatsappPrefills.ts`. */
+export const ONUKPA_WA_LANDLORD_ONBOARD =
+  "Hi Onukpa! I'm a landlord and want to register and list my properties.";
+
+/** Prefill when continuing supplier onboarding from a magic link — sync with bot `webWhatsappPrefills`. */
+export const ONUKPA_WA_SUPPLIER_COMPLETE =
+  "Hi Onukpa! I'm continuing my profile using the link you sent.";

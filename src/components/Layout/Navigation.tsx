@@ -7,10 +7,11 @@ const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
-    { name: "Features", href: "#features" },
-    { name: "Properties", href: "#properties" },
-    { name: "Testimonials", href: "#testimonials" },
-    { name: "For Agents", href: "#for-agents" },
+    { name: "How it works", href: "#how-it-works" },
+    { name: "What we list", href: "#properties" },
+    { name: "Areas", href: "#areas" },
+    { name: "Stories", href: "#testimonials" },
+    { name: "For agents", href: "#for-agents" },
   ];
 
   const handleNavClick = (href: string) => {
@@ -27,88 +28,83 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-lg z-40 border-b border-slate-200/80 shadow-sm py-2">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
-            {/* Logo */}
-            <div
-              className="flex items-center space-x-3"
-              onClick={() => (window.location.href = "https://onukpa.com")}
-            >
-              <div className="flex items-center space-x-2">
+      <nav className="fixed top-0 z-40 w-full border-b border-stone-200/80 bg-white/90 backdrop-blur-md">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-[4.25rem] items-center justify-between gap-4">
+            <div className="flex min-w-0 items-center">
+              <button
+                type="button"
+                onClick={() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className="flex items-center rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                aria-label="Onukpa home"
+              >
                 <img
                   src={onukpa}
                   alt="Onukpa"
-                  className="w-36 md:w-full h-16 rounded-lg object-contain"
+                  className="h-12 w-auto max-w-[9.5rem] object-contain md:h-14 md:max-w-none"
                 />
-              </div>
-            </div>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              {navItems.map((item) => (
-                <>
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleNavClick(item.href);
-                    }}
-                    className="text-slate-600 transition-colors duration-200 font-medium hover:text-primary"
-                  >
-                    {item.name}
-                  </a>
-                </>
-              ))}
-            </div>
-
-            {/* Desktop CTA Button */}
-            <div className="hidden md:flex items-center">
-              <button
-                onClick={() => handleWhatsAppClick()}
-                className="bg-primary text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center space-x-2"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>Get Started</span>
               </button>
             </div>
 
-            {/* Mobile Menu Button */}
-            <div className="flex items-center space-x-4 md:hidden">
+            <div className="hidden items-center gap-8 md:flex">
+              {navItems.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(item.href);
+                  }}
+                  className="text-sm font-medium text-stone-600 transition-colors hover:text-stone-900"
+                >
+                  {item.name}
+                </a>
+              ))}
+            </div>
+
+            <div className="hidden items-center gap-3 md:flex">
               <button
+                type="button"
+                onClick={() => handleWhatsAppClick()}
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#3aa33d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              >
+                <MessageCircle className="h-4 w-4" aria-hidden />
+                Find on WhatsApp
+              </button>
+            </div>
+
+            <div className="flex items-center md:hidden">
+              <button
+                type="button"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all duration-200"
+                className="rounded-lg p-2 text-stone-600 transition hover:bg-stone-100 hover:text-stone-900"
+                aria-expanded={isMenuOpen}
                 aria-label="Toggle menu"
               >
                 {isMenuOpen ? (
-                  <X className="w-6 h-6" />
+                  <X className="h-6 w-6" />
                 ) : (
-                  <Menu className="w-6 h-6" />
+                  <Menu className="h-6 w-6" />
                 )}
               </button>
             </div>
           </div>
         </div>
 
-        {/* Mobile Navigation Menu */}
         <div
-          className={`md:hidden transition-all duration-300 ease-in-out bg-white border-t border-slate-200 ${
+          className={`md:hidden overflow-hidden border-t border-stone-100 bg-white transition-[max-height,opacity] duration-300 ease-out ${
             isMenuOpen
-              ? "max-h-96 opacity-100 visible"
-              : "max-h-0 opacity-0 invisible"
-          } overflow-hidden`}
+              ? "max-h-[28rem] opacity-100"
+              : "max-h-0 opacity-0 pointer-events-none"
+          }`}
         >
-          <div className="px-4 py-4 space-y-1">
-            {/* WhatsApp Badge - Mobile */}
-            <div className="flex items-center justify-center px-3 py-2 bg-green-50 border border-green-200 rounded-full mb-4">
-              <MessageCircle className="w-4 h-4 text-green-600 mr-2" />
-              <span className="text-sm font-medium text-green-700">
-                Powered by WhatsApp
-              </span>
+          <div className="space-y-1 px-4 py-4">
+            <div className="mb-3 flex items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50/80 px-3 py-2 text-xs font-medium text-emerald-900">
+              <MessageCircle className="h-3.5 w-3.5 shrink-0" aria-hidden />
+              Save our number — house hunting lives on WhatsApp.
             </div>
-
-            {/* Navigation Links */}
             {navItems.map((item) => (
               <a
                 key={item.name}
@@ -117,39 +113,36 @@ const Navigation = () => {
                   e.preventDefault();
                   handleNavClick(item.href);
                 }}
-                className="block px-4 py-3 rounded-lg font-medium text-slate-700 hover:text-primary hover:bg-slate-50 transition-all duration-200 border-b border-slate-100 last:border-b-0"
+                className="block rounded-lg px-3 py-3 text-sm font-medium text-stone-800 hover:bg-stone-50"
               >
                 {item.name}
               </a>
             ))}
-
-            {/* Additional Mobile CTA */}
-            <div className="pt-4 border-t border-slate-200">
-              <button
-                onClick={() => {
-                  handleWhatsAppClick();
-                  setIsMenuOpen(false);
-                }}
-                className="w-full bg-primary text-white px-4 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-all duration-300 shadow-lg flex items-center justify-center space-x-2"
-              >
-                <MessageCircle className="w-5 h-5" />
-                <span>Start Chat on WhatsApp</span>
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => {
+                handleWhatsAppClick();
+                setIsMenuOpen(false);
+              }}
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-semibold text-white shadow-sm"
+            >
+              <MessageCircle className="h-4 w-4" aria-hidden />
+              Chat on WhatsApp
+            </button>
           </div>
         </div>
       </nav>
 
-      {/* Overlay for mobile menu */}
       {isMenuOpen && (
-        <div
-          className="fixed inset-0 bg-black/20 z-20 md:hidden backdrop-blur-sm transition-opacity duration-300"
+        <button
+          type="button"
+          className="fixed inset-0 z-30 bg-stone-900/20 backdrop-blur-[2px] md:hidden"
+          aria-label="Close menu"
           onClick={() => setIsMenuOpen(false)}
         />
       )}
 
-      {/* Add padding to prevent content from being hidden under fixed nav */}
-      <div className="h-20 md:h-24"></div>
+      <div className="h-[4.25rem]" aria-hidden />
     </>
   );
 };
