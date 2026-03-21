@@ -189,13 +189,13 @@ const Testimonials = () => {
 
   const nextTestimonial = () => {
     setActiveTestimonial((prev) =>
-      prev === currentTestimonials.length - 1 ? 0 : prev + 1
+      prev === currentTestimonials.length - 1 ? 0 : prev + 1,
     );
   };
 
   const prevTestimonial = () => {
     setActiveTestimonial((prev) =>
-      prev === 0 ? currentTestimonials.length - 1 : prev - 1
+      prev === 0 ? currentTestimonials.length - 1 : prev - 1,
     );
   };
 
@@ -295,7 +295,7 @@ const Testimonials = () => {
                       key={i}
                       className="w-4 h-4 md:w-6 md:h-6 text-yellow-400 fill-current"
                     />
-                  )
+                  ),
                 )}
               </div>
 

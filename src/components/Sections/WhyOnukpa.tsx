@@ -1,4 +1,11 @@
-import { ShieldCheck, MessageCircle, Users, Clock3, MapPin, HandCoins } from "lucide-react";
+import {
+  ShieldCheck,
+  MessageCircle,
+  Users,
+  Clock3,
+  MapPin,
+  HandCoins,
+} from "lucide-react";
 
 const WhyOnukpa = () => {
   const reasons = [
@@ -42,7 +49,8 @@ const WhyOnukpa = () => {
             Why Choose Onukpa
           </h2>
           <p className="md:text-lg text-base text-slate-600 max-w-2xl mx-auto">
-            A calm, transparent way to find a place in Accra – built around how people already use WhatsApp.
+            A calm, transparent way to find a place in Accra – built around how
+            people already use WhatsApp.
           </p>
         </div>
 
@@ -74,4 +82,3 @@ const WhyOnukpa = () => {
 };
 
 export default WhyOnukpa;
-

@@ -9,7 +9,8 @@ const PricingTransparency = () => {
             Pricing Transparency
           </h2>
           <p className="md:text-lg text-base text-slate-600 max-w-2xl mx-auto">
-            No viewing fees. Clear service fees only when a rental is successfully completed.
+            No viewing fees. Clear service fees only when a rental is
+            successfully completed.
           </p>
         </div>
 
@@ -18,9 +19,12 @@ const PricingTransparency = () => {
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
               <ShieldCheck className="w-5 h-5 text-primary" />
             </div>
-            <h3 className="font-semibold text-slate-900 mb-2">No Viewing Fees</h3>
+            <h3 className="font-semibold text-slate-900 mb-2">
+              No Viewing Fees
+            </h3>
             <p className="text-base text-slate-600">
-              You do not pay Onukpa to book or attend property viewings. We protect renters from unnecessary viewing charges.
+              You do not pay Onukpa to book or attend property viewings. We
+              protect renters from unnecessary viewing charges.
             </p>
           </div>
 
@@ -65,12 +69,14 @@ const PricingTransparency = () => {
           <div className="text-sm md:text-base text-slate-700">
             <p className="mb-1">
               Prices on Onukpa are shown as{" "}
-              <span className="font-semibold">monthly estimates</span> so you can easily
-              compare options – even though many landlords in Accra still request{" "}
+              <span className="font-semibold">monthly estimates</span> so you
+              can easily compare options – even though many landlords in Accra
+              still request{" "}
               <span className="font-semibold">1–2 years advance</span>.
             </p>
             <p>
-              We always explain the real payment structure clearly before you decide.
+              We always explain the real payment structure clearly before you
+              decide.
             </p>
           </div>
         </div>
@@ -80,4 +86,3 @@ const PricingTransparency = () => {
 };
 
 export default PricingTransparency;
-

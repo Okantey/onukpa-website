@@ -36,8 +36,8 @@ const AddOnServices = () => {
             We also thought about moving in
           </h2>
           <p className="md:text-lg text-base text-slate-600 max-w-2xl mx-auto">
-            After you find a place, Onukpa is building calm, optional services to make
-            moving in less stressful.
+            After you find a place, Onukpa is building calm, optional services
+            to make moving in less stressful.
           </p>
         </div>
 
@@ -67,8 +67,8 @@ const AddOnServices = () => {
               </div>
               <p className="mt-4 text-xs text-slate-500">
                 These services are optional, designed to support renters after a
-                successful match. Pricing and partners will be shared clearly before
-                you decide.
+                successful match. Pricing and partners will be shared clearly
+                before you decide.
               </p>
             </div>
           ))}
@@ -79,4 +79,3 @@ const AddOnServices = () => {
 };
 
 export default AddOnServices;
-

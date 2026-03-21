@@ -4,17 +4,17 @@ This document describes how the **marketing site**, **supplier flows**, and **ad
 
 ## Repositories
 
-| Area | Path (this workspace) | Role |
-|------|------------------------|------|
-| Web app | `Web/onukpa` | Vite + React (public pages, `/supplier/complete`, `/supplier/portal/:token`, `/supplier/add-property/:token`, `/admin/*`) |
-| Backend | `Backend/onukpa-bot` | Express API, WhatsApp bot, MongoDB, BullMQ workers |
+| Area    | Path (this workspace) | Role                                                                                                                      |
+| ------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Web app | `Web/onukpa`          | Vite + React (public pages, `/supplier/complete`, `/supplier/portal/:token`, `/supplier/add-property/:token`, `/admin/*`) |
+| Backend | `Backend/onukpa-bot`  | Express API, WhatsApp bot, MongoDB, BullMQ workers                                                                        |
 
 ## Environment variables (Web)
 
-| Variable | Purpose | Example |
-|----------|---------|---------|
-| `VITE_API_URL` | Axios base URL for **admin** + auth (must include `/api`) | `http://localhost:3000/api` |
-| `VITE_ONUKPA_API_BASE_URL` | `fetch` helper in `src/api/http.ts` — paths must include `/api/...` (e.g. `/api/properties/public/:id`) | `https://api.onukpa.com` |
+| Variable                   | Purpose                                                                                                 | Example                     |
+| -------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `VITE_API_URL`             | Axios base URL for **admin** + auth (must include `/api`)                                               | `http://localhost:3000/api` |
+| `VITE_ONUKPA_API_BASE_URL` | `fetch` helper in `src/api/http.ts` — paths must include `/api/...` (e.g. `/api/properties/public/:id`) | `https://api.onukpa.com`    |
 
 See `.env.example` in the web root.
 
@@ -22,12 +22,12 @@ See `.env.example` in the web root.
 
 Mounted in `bot.ts`:
 
-| Prefix | Router | Notes |
-|--------|--------|-------|
-| `/api/auth` | `authRoutes` | `POST /login` → `{ ok, token, admin }` |
-| `/api/admin/*` | `adminRoutes` | **Bearer JWT** required. Mutations: `PATCH /admin/properties/:id`, `PATCH /admin/suppliers/:id`, `PATCH /admin/requests/:id` (`status` and/or `adminNotes`), `POST /admin/matches/assign` (`{ renterRequestId, propertyId }`) for manual match + renter link |
-| `/api/properties` | `propertyRoutes` | Public property read + interest + uploads |
-| `/api/supplier` | `supplierRoutes` | `GET /magic-link/status?token=` (public: valid + `tokenType`), plus token-scoped property + upload routes |
+| Prefix            | Router           | Notes                                                                                                                                                                                                                                                        |
+| ----------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `/api/auth`       | `authRoutes`     | `POST /login` → `{ ok, token, admin }`                                                                                                                                                                                                                       |
+| `/api/admin/*`    | `adminRoutes`    | **Bearer JWT** required. Mutations: `PATCH /admin/properties/:id`, `PATCH /admin/suppliers/:id`, `PATCH /admin/requests/:id` (`status` and/or `adminNotes`), `POST /admin/matches/assign` (`{ renterRequestId, propertyId }`) for manual match + renter link |
+| `/api/properties` | `propertyRoutes` | Public property read + interest + uploads                                                                                                                                                                                                                    |
+| `/api/supplier`   | `supplierRoutes` | `GET /magic-link/status?token=` (public: valid + `tokenType`), plus token-scoped property + upload routes                                                                                                                                                    |
 
 `POST /agent/add` (legacy) returns **410** — agent onboarding is **WhatsApp-only** via the bot.
 
@@ -52,15 +52,15 @@ Production origins plus local Vite dev are allowed (`http://localhost:5173`, …
 
 Source: `src/admin/services/`
 
-| Module | Backend route | Maps to UI |
-|--------|---------------|------------|
-| `requestsApi.ts` | `GET /admin/requests` | Requests page |
-| `propertiesApi.ts` | `GET /admin/properties` | Properties page |
-| `suppliersApi.ts` | `GET /admin/suppliers` | Suppliers page |
-| `matchesApi.ts` | `GET /admin/matches` | Matches page |
-| `feesApi.ts` | `GET /admin/fees` | Fees page |
-| `analyticsApi.ts` | `GET /admin/analytics` | Overview + Analytics |
-| `auditApi.ts` | `GET /admin/audit?limit=` | Audit page |
+| Module             | Backend route             | Maps to UI           |
+| ------------------ | ------------------------- | -------------------- |
+| `requestsApi.ts`   | `GET /admin/requests`     | Requests page        |
+| `propertiesApi.ts` | `GET /admin/properties`   | Properties page      |
+| `suppliersApi.ts`  | `GET /admin/suppliers`    | Suppliers page       |
+| `matchesApi.ts`    | `GET /admin/matches`      | Matches page         |
+| `feesApi.ts`       | `GET /admin/fees`         | Fees page            |
+| `analyticsApi.ts`  | `GET /admin/analytics`    | Overview + Analytics |
+| `auditApi.ts`      | `GET /admin/audit?limit=` | Audit page           |
 
 `adminApi.ts` aggregates list endpoints into row shapes used by tables (renter name, supplier label, etc.) and exposes `getDashboardPayload()` for Overview.
 

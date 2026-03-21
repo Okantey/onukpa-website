@@ -16,8 +16,11 @@ const SaveOurNumber = () => {
             </h2>
             <p className="text-slate-200 text-base md:text-lg mb-6 max-w-2xl">
               Save Onukpa on your phone to see{" "}
-              <span className="font-semibold">daily property updates on Status</span>, rental
-              insights, and new verified listings – before they disappear.
+              <span className="font-semibold">
+                daily property updates on Status
+              </span>
+              , rental insights, and new verified listings – before they
+              disappear.
             </p>
 
             <div className="bg-slate-800/70 border border-slate-700 rounded-2xl p-4 mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
@@ -52,7 +55,9 @@ const SaveOurNumber = () => {
               </li>
               <li className="flex items-start space-x-2">
                 <span className="mt-1 w-1.5 h-1.5 rounded-full bg-primary" />
-                <span>Get early alerts when something matches your budget.</span>
+                <span>
+                  Get early alerts when something matches your budget.
+                </span>
               </li>
               <li className="flex items-start space-x-2">
                 <span className="mt-1 w-1.5 h-1.5 rounded-full bg-primary" />
@@ -67,4 +72,3 @@ const SaveOurNumber = () => {
 };
 
 export default SaveOurNumber;
-

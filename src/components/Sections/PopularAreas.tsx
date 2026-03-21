@@ -27,7 +27,8 @@ const PopularAreas = () => {
             Popular Areas in Accra
           </h2>
           <p className="md:text-lg text-base text-slate-600 max-w-2xl mx-auto">
-            Browse trusted rentals in the neighbourhoods Ghanaians actually move to.
+            Browse trusted rentals in the neighbourhoods Ghanaians actually move
+            to.
           </p>
         </div>
 
@@ -37,7 +38,8 @@ const PopularAreas = () => {
               <MapPin className="w-5 h-5 text-primary" />
             </div>
             <p className="text-sm md:text-base text-slate-600">
-              Tap an area when chatting with Onukpa on WhatsApp to narrow your search.
+              Tap an area when chatting with Onukpa on WhatsApp to narrow your
+              search.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -57,4 +59,3 @@ const PopularAreas = () => {
 };
 
 export default PopularAreas;
-

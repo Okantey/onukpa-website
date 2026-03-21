@@ -1,4 +1,9 @@
-import { Building2, CheckCircle2, MessageCircle, ShieldCheck } from "lucide-react";
+import {
+  Building2,
+  CheckCircle2,
+  MessageCircle,
+  ShieldCheck,
+} from "lucide-react";
 import handleWhatsAppClick from "../../utils/openWhatsapp";
 
 const ForLandlords = () => {
@@ -21,16 +26,18 @@ const ForLandlords = () => {
               A calmer way to fill your rooms and apartments
             </h2>
             <p className="text-slate-600 text-sm md:text-base mb-5">
-              Onukpa helps landlords find serious renters without chaos. We bring
-              structured requests, verified profiles and WhatsApp-first support –
-              so you can focus on running your property well.
+              Onukpa helps landlords find serious renters without chaos. We
+              bring structured requests, verified profiles and WhatsApp-first
+              support – so you can focus on running your property well.
             </p>
 
             <ul className="space-y-3 mb-6">
               {points.map((text) => (
                 <li key={text} className="flex items-start space-x-3">
                   <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                  <span className="text-sm md:text-base text-slate-700">{text}</span>
+                  <span className="text-sm md:text-base text-slate-700">
+                    {text}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -71,20 +78,22 @@ const ForLandlords = () => {
 
               <div className="space-y-3 text-sm text-slate-700">
                 <p>
-                  Share your property details once via a secure link. Our team reviews
-                  every listing before it goes live, to protect both you and renters.
+                  Share your property details once via a secure link. Our team
+                  reviews every listing before it goes live, to protect both you
+                  and renters.
                 </p>
                 <p>
-                  We prioritise direct landlords in matching, then trusted agents as a
-                  fallback for harder searches. Your listing benefits from both flows.
+                  We prioritise direct landlords in matching, then trusted
+                  agents as a fallback for harder searches. Your listing
+                  benefits from both flows.
                 </p>
               </div>
 
               <div className="mt-5 flex items-center space-x-3 text-xs text-slate-600">
                 <ShieldCheck className="w-4 h-4 text-primary" />
                 <p>
-                  Supplier profiles and properties may be verified with Ghana Card and
-                  manual checks before large deals.
+                  Supplier profiles and properties may be verified with Ghana
+                  Card and manual checks before large deals.
                 </p>
               </div>
             </div>
@@ -96,4 +105,3 @@ const ForLandlords = () => {
 };
 
 export default ForLandlords;
-

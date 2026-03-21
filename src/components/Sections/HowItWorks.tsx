@@ -1,4 +1,10 @@
-import { MessageCircle, Shield, Bell, HeartHandshake, Send } from "lucide-react";
+import {
+  MessageCircle,
+  Shield,
+  Bell,
+  HeartHandshake,
+  Send,
+} from "lucide-react";
 import handleWhatsAppClick from "../../utils/openWhatsapp";
 
 const HowItWorks = () => {
@@ -16,7 +22,7 @@ const HowItWorks = () => {
     {
       icon: HeartHandshake,
       title: "Show Interest",
-      desc: "Tap \"I'm interested\" on options you like. No viewing fees.",
+      desc: 'Tap "I\'m interested" on options you like. No viewing fees.',
     },
     {
       icon: Send,
@@ -51,9 +57,9 @@ const HowItWorks = () => {
               <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-105 transition-transform duration-300">
                 <step.icon className="w-8 h-8 text-white" />
               </div>
-              <div className="md:text-xl text-lg font-semibold text-slate-900 mb-2">
+              {/* <div className="md:text-xl text-lg font-semibold text-slate-900 mb-2">
                 {step.title}
-              </div>
+              </div> */}
               <p className="text-base md:text-lg text-slate-600">{step.desc}</p>
             </div>
           ))}

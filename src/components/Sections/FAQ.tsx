@@ -55,7 +55,8 @@ const FAQ = () => {
             Frequently Asked Questions
           </h2>
           <p className="md:text-lg text-base text-slate-600">
-            Practical answers to the questions renters, landlords and agents ask most.
+            Practical answers to the questions renters, landlords and agents ask
+            most.
           </p>
         </div>
 
@@ -96,4 +97,3 @@ const FAQ = () => {
 };
 
 export default FAQ;
-
