@@ -10,9 +10,11 @@ type Props = {
   token: string;
   media: SupplierMediaItem[];
   onChange: (next: SupplierMediaItem[]) => void;
+  /** Extra line for category-specific tips (simple English). */
+  extraHint?: string;
 };
 
-const PropertyPhotosSection = ({ token, media, onChange }: Props) => {
+const PropertyPhotosSection = ({ token, media, onChange, extraHint }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -57,6 +59,9 @@ const PropertyPhotosSection = ({ token, media, onChange }: Props) => {
         JPEG, PNG or WebP, up to 5MB each. Up to {MAX_PHOTOS} images. First image is used as the
         primary preview when live.
       </p>
+      {extraHint ? (
+        <p className="text-xs text-slate-600 leading-relaxed">{extraHint}</p>
+      ) : null}
       {error ? (
         <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
           {error}

@@ -55,7 +55,6 @@ export function mapPropertyDocToFormState(doc: Record<string, unknown>): {
   landmark: string;
   monthlyEstimate: string;
   advanceMonths: string;
-  totalPayableNow: string;
   availabilityStatus: string;
   suitableFor: string;
   media: SupplierMediaItem[];
@@ -81,8 +80,6 @@ export function mapPropertyDocToFormState(doc: Record<string, unknown>): {
       doc.advancePeriod != null ? String(doc.advancePeriod) : undefined,
       typeof doc.advanceValue === "number" ? doc.advanceValue : undefined
     ),
-    totalPayableNow:
-      doc.totalPayableNow != null ? String(doc.totalPayableNow) : "",
     availabilityStatus,
     suitableFor: Array.isArray(suitableArr) ? suitableArr.join(", ") : "",
     media: Array.isArray(mediaRaw)
@@ -105,7 +102,6 @@ export function buildPropertyPayload(
     landmark: string;
     monthlyEstimate: string;
     advanceMonths: string;
-    totalPayableNow: string;
     availabilityStatus: string;
     suitableFor: string;
     media: SupplierMediaItem[];
@@ -121,7 +117,6 @@ export function buildPropertyPayload(
     landmark: state.landmark || undefined,
     monthlyEstimate: Number(state.monthlyEstimate),
     advanceMonths: state.advanceMonths ? Number(state.advanceMonths) : undefined,
-    totalPayableNow: state.totalPayableNow ? Number(state.totalPayableNow) : undefined,
     availabilityStatus: state.availabilityStatus,
     suitableFor: state.suitableFor || undefined,
     attributes,

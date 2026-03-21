@@ -25,6 +25,10 @@ import {
   mapPropertyDocToFormState,
 } from "../../constants/supplierPropertyForm";
 import { subtypeOptionsForCategory } from "../../constants/propertyTaxonomy";
+import {
+  advanceMonthSelectOptions,
+  supplierFieldCopyForCategory,
+} from "../../constants/supplierFieldCopy";
 
 const CATEGORY_ICONS: Record<
   CategoryKey,
@@ -53,7 +57,6 @@ const EditSupplierPropertyPage = () => {
   const [landmark, setLandmark] = useState("");
   const [monthlyEstimate, setMonthlyEstimate] = useState("");
   const [advanceMonths, setAdvanceMonths] = useState("");
-  const [totalPayableNow, setTotalPayableNow] = useState("");
   const [availabilityStatus, setAvailabilityStatus] = useState("available");
   const [suitableFor, setSuitableFor] = useState("");
   const [subtype, setSubtype] = useState("");
@@ -97,7 +100,6 @@ const EditSupplierPropertyPage = () => {
         setLandmark(s.landmark);
         setMonthlyEstimate(s.monthlyEstimate);
         setAdvanceMonths(s.advanceMonths);
-        setTotalPayableNow(s.totalPayableNow);
         setAvailabilityStatus(s.availabilityStatus);
         setSuitableFor(s.suitableFor);
         setMedia(s.media);
@@ -119,6 +121,11 @@ const EditSupplierPropertyPage = () => {
   const subtypeChoices = useMemo(
     () => (category ? subtypeOptionsForCategory(category) : []),
     [category]
+  );
+  const copy = useMemo(() => supplierFieldCopyForCategory(category), [category]);
+  const advanceOptions = useMemo(
+    () => advanceMonthSelectOptions(advanceMonths),
+    [advanceMonths]
   );
   const subtypeIsLegacy = Boolean(subtype && !subtypeChoices.includes(subtype));
 
@@ -151,7 +158,6 @@ const EditSupplierPropertyPage = () => {
         landmark,
         monthlyEstimate,
         advanceMonths,
-        totalPayableNow,
         availabilityStatus,
         suitableFor,
         media,
@@ -221,6 +227,11 @@ const EditSupplierPropertyPage = () => {
 
               <div>
                 <p className="text-sm font-semibold text-slate-800 mb-3">Property category *</p>
+                {category ? (
+                  <p className="text-xs text-slate-600 leading-relaxed mb-3">
+                    {copy.categorySectionHint}
+                  </p>
+                ) : null}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {(Object.keys(SUPPLIER_CATEGORY_LABELS) as CategoryKey[]).map((key) => {
                     const label = SUPPLIER_CATEGORY_LABELS[key];
@@ -245,7 +256,12 @@ const EditSupplierPropertyPage = () => {
                 </div>
               </div>
 
-              <PropertyPhotosSection token={token} media={media} onChange={setMedia} />
+              <PropertyPhotosSection
+                token={token}
+                media={media}
+                onChange={setMedia}
+                extraHint={category ? copy.photoHint : undefined}
+              />
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
@@ -258,7 +274,9 @@ const EditSupplierPropertyPage = () => {
                     onChange={(e) => setTitle(e.target.value)}
                     required
                     className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                    placeholder={copy.titlePlaceholder}
                   />
+                  <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">{copy.titleHint}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -282,9 +300,7 @@ const EditSupplierPropertyPage = () => {
                       </option>
                     ))}
                   </select>
-                  <p className="mt-1 text-xs text-slate-500">
-                    Same options as the WhatsApp bot so searches match your listing.
-                  </p>
+                  <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">{copy.subtypeHint}</p>
                 </div>
               </div>
 
@@ -298,7 +314,9 @@ const EditSupplierPropertyPage = () => {
                   required
                   rows={4}
                   className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-y"
+                  placeholder={copy.descriptionPlaceholder}
                 />
+                <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">{copy.descriptionHint}</p>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">
@@ -322,6 +340,7 @@ const EditSupplierPropertyPage = () => {
                       ))}
                     </select>
                   </div>
+                  <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">{copy.areaHint}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -332,11 +351,13 @@ const EditSupplierPropertyPage = () => {
                     value={landmark}
                     onChange={(e) => setLandmark(e.target.value)}
                     className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                    placeholder={copy.landmarkPlaceholder}
                   />
+                  <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">{copy.landmarkHint}</p>
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
                     Monthly estimate (GHS) *
@@ -349,30 +370,27 @@ const EditSupplierPropertyPage = () => {
                     required
                     className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                   />
+                  <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">{copy.monthlyHint}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Advance (months)
+                    Rent advance *
                   </label>
-                  <input
-                    type="number"
-                    min={0}
+                  <select
                     value={advanceMonths}
                     onChange={(e) => setAdvanceMonths(e.target.value)}
-                    className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Total payable now (optional)
-                  </label>
-                  <input
-                    type="number"
-                    min={0}
-                    value={totalPayableNow}
-                    onChange={(e) => setTotalPayableNow(e.target.value)}
-                    className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                  />
+                    required
+                    className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all bg-white"
+                  >
+                    {advanceOptions.map((o, idx) => (
+                      <option key={idx} value={o.value}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
+                    Pick 12 or 24 months if you want to match what most renters expect in Ghana.
+                  </p>
                 </div>
               </div>
 
@@ -390,6 +408,7 @@ const EditSupplierPropertyPage = () => {
                     <option value="soon">Available soon</option>
                     <option value="occupied">Currently occupied</option>
                   </select>
+                  <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">{copy.availabilityHint}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -400,7 +419,9 @@ const EditSupplierPropertyPage = () => {
                     value={suitableFor}
                     onChange={(e) => setSuitableFor(e.target.value)}
                     className="w-full px-3 py-2 text-sm md:text-base border border-slate-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                    placeholder={copy.suitablePlaceholder}
                   />
+                  <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">{copy.suitableHint}</p>
                 </div>
               </div>
 
